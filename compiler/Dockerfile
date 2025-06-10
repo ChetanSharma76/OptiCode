@@ -1,25 +1,41 @@
-# Use official Node.js 22.15.0 image
-FROM node:22.15.0
+FROM node:18-alpine
 
-# Set working directory inside container
+# Install required runtimes and sandboxing tools
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    g++ \
+    make \
+    openjdk17 \
+    bubblewrap \
+    util-linux \
+    tini
+
+# Create a secure non-root user and sandbox directory
+RUN adduser -D runner && \
+    mkdir -p /sandbox && \
+    chown runner:runner /sandbox && \
+    chmod 700 /sandbox && \
+    chmod 555 /usr/bin/python3 && \
+    chmod 555 /usr/bin/g++ && \
+    chmod 555 /usr/local/bin/node && \
+    chmod 555 /usr/lib/jvm/java-17-openjdk/bin/java && \
+    chmod 555 /usr/lib/jvm/java-17-openjdk/bin/javac
+
+# Switch to working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json first
+# Copy package files and install only production deps
 COPY package*.json ./
+RUN npm install --production
 
-# Install all dependencies including devDependencies (nodemon)
-RUN npm install
-
-# Copy all source code into the container
+# Copy the rest of the source
 COPY . .
-RUN chmod -R 777 temp
 
-# Expose port 4000
+# Use the non-root user
+USER runner
+
 EXPOSE 4000
 
-# Create a non-root user and switch to it for better security
-RUN useradd -m appuser
-USER appuser
-
-# Run the compiler service using nodemon with 'npm run dev'
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "server.js"]

@@ -2,8 +2,10 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Ensure the uploads folder exists
-const uploadDir = './uploads';
+// Absolute path to ensure Docker compatibility
+const uploadDir = path.resolve('./uploads');
+
+// Ensure directory exists
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -31,7 +33,6 @@ const upload = multer({
   fileFilter
 });
 
-// This is key! export this for routes expecting multiple file fields
 export const uploadProblemFiles = upload.fields([
   { name: 'inputFiles', maxCount: 20 },
   { name: 'outputFiles', maxCount: 20 },

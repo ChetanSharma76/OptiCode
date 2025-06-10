@@ -4,7 +4,7 @@ services:
   ojbackend:
     build:
       context: ./backend
-    image: ojbackend
+    image: public.ecr.aws/t6e9p5n9/ojbackend:latest
     container_name: ojbackend_container
     ports:
       - "3000:3000"
@@ -16,8 +16,8 @@ services:
     working_dir: /usr/src/app
     entrypoint: >
       sh -c "chown -R appuser:appuser /usr/src/app/uploads /usr/src/app/uploadsProfile &&
-         chmod 750 /usr/src/app/uploads /usr/src/app/uploadsProfile &&
-         exec npm start"
+            chmod 750 /usr/src/app/uploads /usr/src/app/uploadsProfile &&
+            exec npm start"
     depends_on:
       - mongodb
     networks:
@@ -26,21 +26,18 @@ services:
   ojcompiler:
     build:
       context: ./compiler
-    image: ojcompiler
+    image: public.ecr.aws/t6e9p5n9/ojcompiler:latest
     container_name: ojcompiler_container
     ports:
       - "4000:4000"
     env_file:
       - ./compiler/.env
+    volumes:
+      - uploads_data:/usr/src/app/uploads  
     depends_on:
       - ojbackend
     networks:
       - ojnet
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: '256M'
 
   mongodb:
     image: mongo:latest
@@ -59,3 +56,4 @@ volumes:
 
 networks:
   ojnet:
+    driver: bridge

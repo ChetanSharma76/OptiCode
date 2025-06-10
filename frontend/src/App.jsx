@@ -16,14 +16,14 @@ import ResetPassword from './pages/ResetPassword.jsx';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-      {/* Navbar with proper z-index */}
+    <div className="min-h-screen flex flex-col">
+      {/* Navbar */}
       <div className="relative z-30">
         <Navbar />
       </div>
 
-      {/* Main content area with proper stacking context */}
-      <main className="flex-grow relative z-10">
+      {/* Main content area - this will expand to fill available space */}
+      <main className="flex-1 relative z-10">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/problems" element={<Problems />} />
@@ -38,12 +38,13 @@ function App() {
         </Routes>
       </main>
 
-      {/* Footer */}
-      <div className="relative z-20">
+      {/* Footer - will always be at the bottom */}
+      <div className="">
         <Footer />
       </div>
+      
 
-      {/* Toast Container - high z-index but below modals */}
+      {/* Toast Container */}
       <ToastContainer
         position="top-center"
         autoClose={5000}

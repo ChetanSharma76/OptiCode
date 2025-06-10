@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const Login = () => {
   const { backendUrl, token, setToken } = useContext(AppContext);
-  const [state, setState] = useState('signup');
+  const [state, setState] = useState('login');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

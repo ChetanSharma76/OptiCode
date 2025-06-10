@@ -20,6 +20,8 @@
     "axios": "^1.9.0",
     "dom": "^0.0.3",
     "framer-motion": "^12.12.1",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "lucide": "^0.511.0",
     "lucide-react": "^0.511.0",
     "prismjs": "^1.30.0",

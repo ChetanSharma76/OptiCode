@@ -12,6 +12,11 @@ const reviewCode = async (req, res) => {
   if (!problemInfo) {
     return res.status(404).json({ success: false, message: 'Problem not found' });
   }
+
+  if( !code || !language || code === '// Write your code here...' ) {
+    return res.status(400).json({ success: false, message: 'Code and language are required' });
+  }
+
   console.log(problemInfo[0].description);
   
   const fallbackPrompt = `
@@ -24,7 +29,7 @@ const reviewCode = async (req, res) => {
   ${problemInfo[0].constraints}
   `;
 
-  const prompt = (code && code !== '// Write your code here...') ? `
+  const prompt = `
   You're an AI code reviewer. The language is ${language}.
   Analyze the code below. Your response should include:
   1. Any syntax or logical errors.
@@ -37,7 +42,7 @@ const reviewCode = async (req, res) => {
   \`\`\`${language}
   ${code}
   \`\`\`
-  ` : fallbackPrompt;
+  ` ;
 
 
   try {

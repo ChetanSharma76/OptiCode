@@ -33,12 +33,15 @@ const CreateProblem = () => {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [samples, setSamples] = useState([{ input: '', output: '' }]);
-  const [inputFiles, setInputFiles] = useState([]);
-  const [outputFiles, setOutputFiles] = useState([]);
-  const [testCaseZip, setTestCaseZip] = useState(null);
+  const inputFilesRef = useRef(null);
+  const outputFilesRef = useRef(null);
+  const zipFileRef = useRef(null);
   const [isUploadingZip, setIsUploadingZip] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const {problems,getProblems} = useContext(AdminContext);
+  const [testCaseZip, setTestCaseZip] = useState(null);
+  const [inputFiles,setInputFiles] = useState([]);
+  const [outputFiles,setOutputFiles] = useState([]);
 
   const inputRef = useRef(null);
   const outputRef = useRef(null);
@@ -52,20 +55,18 @@ const CreateProblem = () => {
   };
 
   const handleInputFiles = (e) => {
-    const files = [...e.target.files];
-    setInputFiles(files);
+    inputFilesRef.current = [...e.target.files];
   };
 
   const handleOutputFiles = (e) => {
-    const files = [...e.target.files];
-    setOutputFiles(files);
+    outputFilesRef.current = [...e.target.files];
   };
 
   const handleZipFile = (e) => {
     if (e.target.files.length > 0) {
-      setTestCaseZip(e.target.files[0]);
-      setInputFiles([]);
-      setOutputFiles([]);
+      zipFileRef.current = e.target.files[0];
+      inputFilesRef.current = [];
+      outputFilesRef.current = [];
     }
   };
 
@@ -80,6 +81,15 @@ const CreateProblem = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
+    const inputFiles = inputFilesRef.current || [];
+    const outputFiles = outputFilesRef.current || [];
+    const testCaseZip = zipFileRef.current;
+
+    setTestCaseZip(testCaseZip);
+    setInputFiles(inputFiles);
+    setOutputFiles(outputFiles);
 
     if (
       !title || !description || !inputFormat || !outputFormat || !constraints || !difficulty ||
@@ -117,6 +127,7 @@ const CreateProblem = () => {
       outputFiles.forEach(file => formData.append('outputFiles', file));
     }
 
+
     try {
       setIsUploadingZip(true);
       const token = localStorage.getItem('token');
@@ -136,9 +147,9 @@ const CreateProblem = () => {
         setDifficulty('easy');
         setTags([]);
         setSamples([{ input: '', output: '' }]);
-        setInputFiles([]);
-        setOutputFiles([]);
-        setTestCaseZip(null);
+        zipFileRef.current = null;
+        inputFilesRef.current = null;
+        outputFilesRef.current = null;
         getProblems(); // Refresh from server
         navigate('/problems');
         toast.success('Problem created successfully!');

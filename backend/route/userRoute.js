@@ -1,7 +1,8 @@
 import express from 'express'
-import { getUserProfile, loginUser, registerUser, updateUserProfile, forgotPassword, resetPassword, addBookmark } from '../controller/userController.js'
+import { getUserProfile, loginUser, registerUser, updateUserProfile, forgotPassword, resetPassword, addBookmark, getUserStats } from '../controller/userController.js'
 import authUser from '../middleware/authUser.js'
 import uploadProfile from '../middleware/uploadProfile.js'
+import authAdmin from '../middleware/authAdmin.js'
 
 
 const userRouter = express.Router()
@@ -13,5 +14,6 @@ userRouter.put('/update-profile',authUser,uploadProfile.single('image'),updateUs
 userRouter.post('/forgot-password', forgotPassword);
 userRouter.post('/reset-password', resetPassword);
 userRouter.post('/bookmark',authUser,addBookmark);
+userRouter.get('/user-stats', authUser, authAdmin, getUserStats);
 
 export default userRouter

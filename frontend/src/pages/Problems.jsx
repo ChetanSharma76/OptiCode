@@ -13,7 +13,7 @@ const DSATags = [
 ];
 
 const Problems = () => {
-  const { problems, token, backendUrl, user } = useContext(AppContext);
+  const { problems, token, backendUrl, userData, setUserData } = useContext(AppContext);
   const navigate = useNavigate();
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -86,7 +86,7 @@ const Problems = () => {
     }
   };
 
-  // Bookmark functionality
+  // Enhanced bookmark functionality with proper state management
   const handleBookmark = async (problemId) => {
     if (!token) {
       toast.error('Please login to bookmark problems');
@@ -96,8 +96,8 @@ const Problems = () => {
     setBookmarkingProblem(problemId);
     
     try {
-      const isBookmarked = user?.bookmarks?.includes(problemId);
-      const endpoint = isBookmarked ? 'remove-bookmark' : 'add-bookmark';
+      const isBookmarked = userData?.bookmarks?.includes(problemId);
+      console.log(isBookmarked);
       
       const response = await axios.post(
         `${backendUrl}/api/user/bookmark`,
@@ -106,6 +106,17 @@ const Problems = () => {
       );
 
       if (response.data.success) {
+        // Update user state immediately for instant UI feedback
+        setUserData(prevUser => {
+          const updatedBookmarks = isBookmarked 
+            ? prevUser.bookmarks.filter(id => id !== problemId)
+            : [...(prevUser.bookmarks || []), problemId];
+          
+          return {
+            ...prevUser,
+            bookmarks: updatedBookmarks
+          };
+        });
         toast.success(isBookmarked ? 'Bookmark removed' : 'Problem bookmarked');
       } else {
         toast.error(response.data.message || 'Failed to update bookmark');
@@ -324,24 +335,24 @@ const Problems = () => {
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        {/* Bookmark Button - Only show if user is logged in */}
+                        {/* Enhanced Bookmark Button - Only show if user is logged in */}
                         {token && (
                           <button
                             onClick={() => handleBookmark(problem._id)}
                             disabled={bookmarkingProblem === problem._id}
-                            className={`p-2 rounded-full transition-all duration-200 ${
-                              user?.bookmarks?.includes(problem._id)
-                                ? 'bg-yellow-500 text-white shadow-md'
+                            className={`p-1.25 rounded-full transition-all duration-200 ${
+                              userData?.bookmarks?.includes(problem._id)
+                                ? 'bg-blue-500 text-white shadow-md hover:bg-blue-600'
                                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                             } ${bookmarkingProblem === problem._id ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            title={user?.bookmarks?.includes(problem._id) ? 'Remove bookmark' : 'Add bookmark'}
+                            title={userData?.bookmarks?.includes(problem._id) ? 'Remove bookmark' : 'Add bookmark'}
                           >
                             {bookmarkingProblem === problem._id ? (
                               <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                             ) : (
                               <FiBookmark 
-                                size={16} 
-                                fill={user?.bookmarks?.includes(problem._id) ? 'currentColor' : 'none'} 
+                                size={14} 
+                                fill={userData?.bookmarks?.includes(problem._id) ? 'currentColor' : 'none'} 
                               />
                             )}
                           </button>

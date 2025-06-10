@@ -25,8 +25,8 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full fixed z-50 top-0 left-0 bg-white/10 dark:bg-black/20 backdrop-blur-md border-b border-white/20 shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <nav className="w-full fixed h-16 z-50 top-0 left-0 bg-white/10 dark:bg-black/20 backdrop-blur-md border-b border-white/20 shadow-md">
+      <div className="max-w-7xl mx-auto px-6 py-3  flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-3">
           <img
@@ -48,7 +48,7 @@ const Navbar = () => {
               to={path}
               className={({ isActive }) =>
                 `text-lg font-medium text-violet-400 relative transition-all duration-300
-                 ${isActive ? "after:w-full" : "after:w-0"}
+                 ${isActive ? "after:w-full text-violet-500" : "after:w-0"}
                  after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-violet-500 after:transition-all after:duration-300 hover:after:w-full`
               }
             >
@@ -58,7 +58,7 @@ const Navbar = () => {
           {!token ? (
             <button
               onClick={() => navigate("/login")}
-              className="ml-4 px-5 py-2 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition"
+              className="ml-4 px-5 py-2 font-semibold rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 shadow-md"
             >
               Login
             </button>
@@ -127,7 +127,7 @@ const Navbar = () => {
                   setMobileMenuOpen(false);
                   navigate("/login");
                 }}
-                className="mt-6 px-5 py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition"
+                className="w-full py-2 font-semibold rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 shadow-md"
               >
                 Login
               </button>

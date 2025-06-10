@@ -131,21 +131,11 @@ const Navbar = () => {
                 to={path}
                 onClick={() => setIsSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `relative group text-lg font-medium transition-all ${
-                    isActive ? "text-violet-500" : "text-violet-400 hover:text-violet-200"
+                  `relative group text-lg font-medium transition-all text-white ${
+                    isActive ? "text-violet-300" : "hover:text-violet-200"
                   }`
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    {name}
-                    <span
-                      className={`absolute left-0 -bottom-1 h-[2px] bg-violet-500 transition-all duration-300 ${
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
-                    />
-                  </>
-                )}
               </NavLink>
             </li>
           ))}

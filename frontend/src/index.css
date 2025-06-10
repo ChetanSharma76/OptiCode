@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+body, html {
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #0f0f23, #1a1a3a, #2d1b69) !important;
+  background-attachment: fixed;
+  background-size: cover;
+}
 
 
 @keyframes borderMove {

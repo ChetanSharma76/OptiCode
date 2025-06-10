@@ -204,24 +204,63 @@ const addBookmark = async (req, res) => {
     const userId = req.user.id;
 
     // Check if the problem exists
-    const problem = await Problem.findById(problemId);
+    const problem = await Problem.findById({_id: problemId});
     if (!problem) { 
       return res.status(404).json({ success: false, message: 'Problem not found' });
     }   
-    // Check if the user already bookmarked the problem
+    
+    // Get the user
     const user = await User.findById(userId);
-    if (user.bookmarks.includes(problemId)) {
-      return res.status(400).json({ success: false, message: 'Problem already bookmarked' });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
-    // Add the problem to the user's bookmarks
-    user.bookmarks.push(problemId);
-    await user.save();
-    res.status(200).json({ success: true, message: 'Problem bookmarked successfully' });
+
+    // Check if the user already bookmarked the problem
+    const isBookmarked = user.bookmarks.includes(problemId);
+    
+    if (isBookmarked) {
+      // Remove the bookmark
+      user.bookmarks = user.bookmarks.filter(id => id.toString() !== problemId.toString());
+      await user.save();
+      res.status(200).json({ 
+        success: true, 
+        message: 'Bookmark removed',
+        bookmarks: user.bookmarks,
+        action: 'removed'
+      });
+    } else {
+      // Add the bookmark
+      user.bookmarks.push(problemId);
+      await user.save();
+      res.status(200).json({ 
+        success: true, 
+        message: 'Problem bookmarked successfully',
+        bookmarks: user.bookmarks,
+        action: 'added'
+      });
+    }
   }
   catch (error) {
-    console.error('Error adding bookmark:', error);
-    res.status(500).json({ success: false, message: 'Failed to bookmark problem' });
+    console.error('Error updating bookmark:', error);
+    res.status(500).json({ success: false, message: 'Failed to update bookmark' });
   }
 }
 
-export { registerUser , loginUser , getUserProfile , updateUserProfile , forgotPassword , resetPassword, addBookmark}
+// Get detailed user statistics
+const getUserStats = async (req, res) => {
+  try {
+    // Total users count
+    const totalUsers = await User.countDocuments();
+
+    res.json({
+      success: true,
+        totalUsers,
+    });
+  } catch (error) {
+    console.error('Error fetching user statistics:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch user statistics' });
+  }
+};
+
+
+export { registerUser , loginUser , getUserProfile , updateUserProfile , forgotPassword , resetPassword, addBookmark, getUserStats};

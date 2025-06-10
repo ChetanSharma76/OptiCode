@@ -1,50 +1,70 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { executeCode } from './service/codeExecutor.js';  // your existing code executor logic
+import { executeCode } from './service/codeExecutor.js';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later'
+});
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use(limiter);
 
 app.post('/', async (req, res) => {
   const { code, language, input } = req.body;
 
   if (!code || !language) {
-    return res.status(400).json({ success: false, error: 'Code and language are required' });
+    return res.status(400).json({
+      success: false,
+      verdict: 'Bad Request',
+      type: 'Bad Request',
+      error: 'Code and language are required',
+      executionTime: 0,
+      memoryUsed: 0,
+    });
   }
 
   try {
-    const start = Date.now();
+    const start = process.hrtime.bigint();
     const result = await executeCode(code, language, input || '');
-    const end = Date.now();
-
-    const executionTime = end - start;
-
-    // The executeCode function should ideally return an object like:
-    // { success: true/false, output: '...', error: '...' }
+    const end = process.hrtime.bigint();
+    const executionTime = Number(end - start) / 1e6; // Convert to milliseconds
 
     if (result.success) {
-      return res.json({
+      return res.status(200).json({
         success: true,
+        verdict: 'Executed',
         output: result.output,
         executionTime,
+        memoryUsed: result.memoryUsed || 0,
       });
     } else {
-        console.error('Execution error:', result.error);
-      return res.json({
+      return res.status(200).json({
         success: false,
-        error: result.error || 'Execution failed',
+        verdict: result.type,
+        type: result.type,
+        error: result.error.replace(/\/sandbox\/[a-zA-Z0-9\-]+\.cpp:/g, 'Line:') || 'Unknown error',
         executionTime,
+        memoryUsed: result.memoryUsed || 0,
       });
     }
   } catch (err) {
-    console.error('Execution server error:', err);
+    console.error('Execution error:', err);
     return res.status(500).json({
       success: false,
-      error: 'Internal server error during code execution',
+      verdict: 'Internal Error',
+      type: 'Internal Error',
+      error: 'An internal error occurred during code execution',
+      executionTime: 0,
+      memoryUsed: 0,
     });
   }
 });
