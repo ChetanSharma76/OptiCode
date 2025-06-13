@@ -97,6 +97,10 @@ const ProblemPage = () => {
   const containerRef = useRef(null);
   const dragHandleRef = useRef(null);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // FIX: Enhanced window resize handler for responsiveness
   useEffect(() => {
     const handleResize = () => {
@@ -333,7 +337,6 @@ const ProblemPage = () => {
       }, {
         headers: { token }
       }); 
-      console.log(res)
       if (res.data.success) {
         console.log(res.data.output);
         setVerdict(res.data.verdict || 'Success');
@@ -795,7 +798,7 @@ const ProblemPage = () => {
                     Results
                   </h3>
                   <div className="flex gap-4 text-xs text-gray-400">
-                    {executionTime !== null && <span>Time: {executionTime} ms</span>}
+                    {executionTime !== null && <span>Time: {Math.ceil(executionTime)} ms</span>}
                     {memoryUsage !== null && <span>Memory: {memoryUsage} MB</span>}
                   </div>
                 </div>
@@ -820,6 +823,18 @@ const ProblemPage = () => {
                     }`}></div>
                     <span className="font-semibold break-words">{verdict}</span>
                   </div>
+                  {/* Always show output for Compilation Error and Runtime Error */}
+                  {(['Compilation Error', 'Runtime Error'].includes(verdict) && output) && (
+                    <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all overflow-x-auto border border-gray-700/30 text-red-200 text-xs">
+                      {output}
+                    </pre>
+                  )}
+                  {/* Show output for other verdicts as usual */}
+                  {(!['Compilation Error', 'Runtime Error'].includes(verdict) && output) && (
+                    <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all overflow-x-auto border border-gray-700/30 text-blue-200 text-xs">
+                      {output}
+                    </pre>
+                  )}
                 </div>
 
                 {/* Enhanced Test Case Details with forced re-render */}
@@ -840,7 +855,6 @@ const ProblemPage = () => {
                           {failedTestCase.input || '—'}
                         </div>
                       </div>
-
                       {failedTestCase.expectedOutput !== undefined && (
                         <div>
                           <div className="text-gray-400 mb-2 font-medium">Expected Output</div>
@@ -849,7 +863,6 @@ const ProblemPage = () => {
                           </div>
                         </div>
                       )}
-
                       <div>
                         <div className="text-blue-400 mb-2 font-medium">Your Output</div>
                         <div className="bg-blue-900/20 p-3 rounded-lg font-mono whitespace-pre-wrap break-all overflow-x-auto border border-blue-500/30">
