@@ -46,7 +46,7 @@ const AdminStatistics = () => {
     getProblems, 
     problems, 
     setProblems, 
-    backendUrl 
+    backendUrl
   } = useContext(AdminContext);
 
   // State management
@@ -198,7 +198,7 @@ const AdminStatistics = () => {
       return acc;
     }, []);
     
-    return [...new Set(allTopics)].slice(0, 8); // Limit to 8 most common topics
+    return [...new Set(allTopics)].slice(0, 8); 
   };
 
   // Filter problems based on selected filters

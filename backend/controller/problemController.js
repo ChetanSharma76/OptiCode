@@ -50,7 +50,8 @@ const createProblem = async (req, res) => {
       const allExtractedFiles = walkSync(extractPath);
       const inputFiles = allExtractedFiles.filter(f => path.basename(f).startsWith('input') && f.endsWith('.txt')).sort();
       const outputFiles = allExtractedFiles.filter(f => path.basename(f).startsWith('output') && f.endsWith('.txt')).sort();
-
+      console.log(inputFiles);
+      console.log(outputFiles);
       if (inputFiles.length !== outputFiles.length) {
         return res.status(400).json({ success: false, message: 'Number of input and output files in ZIP must match.' });
       }

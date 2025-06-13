@@ -125,31 +125,33 @@ const Navbar = () => {
         </div>
 
         <ul className="flex flex-col space-y-4 px-6 py-4">
-          {navItems.map(({ name, path }) => (
-            <li key={name}>
-              <NavLink
-                to={path}
-                onClick={() => setIsSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `relative group text-lg font-medium transition-all text-white ${
-                    isActive ? "text-violet-300" : "hover:text-violet-200"
-                  }`
-                }
-              >
-              </NavLink>
-            </li>
-          ))}
-
-          {userData?.role === "Admin" && (
+        {navItems.map(({ name, path }) => (
+          <li key={name}>
             <NavLink
-              to="/admin"
+              to={path}
               onClick={() => setIsSidebarOpen(false)}
-              className="text-violet-400 text-lg font-medium hover:text-violet-200 transition-all"
+              className={({ isActive }) =>
+                `relative group text-lg font-medium transition-all text-white ${
+                  isActive ? "text-violet-300" : "hover:text-violet-200"
+                }`
+              }
             >
-              Admin
+              {name}
             </NavLink>
-          )}
-        </ul>
+          </li>
+        ))}
+
+        {userData?.role === "Admin" && (
+          <NavLink
+            to="/admin"
+            onClick={() => setIsSidebarOpen(false)}
+            className="text-violet-400 text-lg font-medium hover:text-violet-200 transition-all"
+          >
+            Admin
+          </NavLink>
+        )}
+      </ul>
+
 
         <div className="px-6 pt-2 space-y-4">
           {!token && !userData ? (

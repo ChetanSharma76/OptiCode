@@ -6,6 +6,8 @@ import { AdminContext } from "../context/AdminContext";
 import LogoutButton from "./LogoutButton";
 import { toast } from "react-toastify";
 
+// ...imports and other code remain unchanged
+
 const Navbar = () => {
   const { token, setToken, adminData } = useContext(AdminContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,19 +44,6 @@ const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-6">
-          {navItems.map(({ label, path }) => (
-            <NavLink
-              key={label}
-              to={path}
-              className={({ isActive }) =>
-                `text-lg font-medium text-violet-400 relative transition-all duration-300
-                 ${isActive ? "after:w-full text-violet-500" : "after:w-0"}
-                 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-violet-500 after:transition-all after:duration-300 hover:after:w-full`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
           {!token ? (
             <button
               onClick={() => navigate("/login")}
@@ -64,6 +53,19 @@ const Navbar = () => {
             </button>
           ) : (
             <>
+              {navItems.map(({ label, path }) => (
+                <NavLink
+                  key={label}
+                  to={path}
+                  className={({ isActive }) =>
+                    `text-lg font-medium text-violet-400 relative transition-all duration-300
+                     ${isActive ? "after:w-full text-violet-500" : "after:w-0"}
+                     after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-violet-500 after:transition-all after:duration-300 hover:after:w-full`
+                  }
+                >
+                  {label}
+                </NavLink>
+              ))}
               <img
                 src={adminData?.profileImage}
                 alt="profile"
@@ -106,21 +108,6 @@ const Navbar = () => {
 
           {/* Nav Links */}
           <div className="flex flex-col space-y-6 p-6 bg-white">
-            {navItems.map(({ label, path }) => (
-              <NavLink
-                key={label}
-                to={path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `text-xl font-semibold text-violet-600 relative transition-all duration-300 hover:text-violet-800
-                   ${isActive ? "after:w-full text-violet-800" : "after:w-0"}
-                   after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-violet-600 after:transition-all after:duration-300 hover:after:w-full`
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
-
             {!token ? (
               <button
                 onClick={() => {
@@ -133,6 +120,20 @@ const Navbar = () => {
               </button>
             ) : (
               <>
+                {navItems.map(({ label, path }) => (
+                  <NavLink
+                    key={label}
+                    to={path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `text-xl font-semibold text-violet-600 relative transition-all duration-300 hover:text-violet-800
+                       ${isActive ? "after:w-full text-violet-800" : "after:w-0"}
+                       after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-violet-600 after:transition-all after:duration-300 hover:after:w-full`
+                    }
+                  >
+                    {label}
+                  </NavLink>
+                ))}
                 <div
                   className="flex items-center space-x-3 mt-6 cursor-pointer p-3 rounded-lg hover:bg-violet-50 transition-colors border border-violet-200"
                   onClick={() => {
@@ -157,8 +158,6 @@ const Navbar = () => {
               </>
             )}
           </div>
-
-          {/* Footer */}
         </div>
       )}
     </nav>

@@ -332,8 +332,8 @@ const ProblemPage = () => {
         input: customInput || null,
       }, {
         headers: { token }
-      });
-
+      }); 
+      console.log(res)
       if (res.data.success) {
         console.log(res.data.output);
         setVerdict(res.data.verdict || 'Success');

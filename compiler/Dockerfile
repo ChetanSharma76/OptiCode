@@ -22,6 +22,22 @@ RUN adduser -D runner && \
     chmod 555 /usr/lib/jvm/java-17-openjdk/bin/java && \
     chmod 555 /usr/lib/jvm/java-17-openjdk/bin/javac
 
+
+# 1. Install required tools
+RUN apk update && apk add --no-cache bash build-base curl
+
+# 2. Download and install GNU time
+RUN curl -LO http://ftp.gnu.org/gnu/time/time-1.9.tar.gz && \
+    tar -xvzf time-1.9.tar.gz && \
+    cd time-1.9 && \
+    ./configure && make && make install && \
+    cd .. && rm -rf time-1.9 time-1.9.tar.gz
+
+# 3. Replace BusyBox time with GNU time
+RUN mv /usr/bin/time /usr/bin/time-busybox && \
+    ln -s /usr/local/bin/time /usr/bin/time
+
+    
 # Switch to working directory
 WORKDIR /usr/src/app
 

@@ -21,6 +21,9 @@ RUN mkdir -p /usr/src/app/uploads /usr/src/app/uploadsProfile \
     && chown -R appuser:appuser /usr/src/app/uploads /usr/src/app/uploadsProfile \
     && chmod 750 /usr/src/app/uploads /usr/src/app/uploadsProfile
 
+RUN apt-get update && \
+    apt-get install -y time
+
 # Use non-root user
 USER appuser
 

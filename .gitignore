@@ -86,6 +86,8 @@ compiler/ .env
 OJSERVER.pem
 ./OJSERVER.pem
 .OJSERVER.pem/
+/OJSERVER.pem
+OJSERVER.pem
 
 # OS-specific
 .DS_Store
