@@ -15,12 +15,16 @@ THE OPTICODE is a full-stack **Online Judge system** that allows users to solve 
 
 ## 📸 Screenshots
 
-| ![Home](https://github.com/user-attachments/assets/44fbded0-51da-44d7-a841-a3ca243f5cbb) | ![Problem](https://github.com/user-attachments/assets/e5b70dd5-0f4b-48d3-8972-06e73b5ef116) |
+| ![Home]](![image](https://github.com/user-attachments/assets/c28d619d-3ce8-4a4a-9eba-c8b87340fa0e)
+) | ![Problem](![ss3](https://github.com/user-attachments/assets/88c09d43-90dd-478a-a4bf-a4215ed8cac9)
+) 
 
 
-| ![Editor](https://github.com/user-attachments/assets/82927446-9fe2-4fbc-92df-162926e240c3) | ![Submissions](https://github.com/user-attachments/assets/f96ba6ea-9802-4724-ad6b-90d4faf003a8) |
+| ![Editor](![ss1](https://github.com/user-attachments/assets/654ef453-adb2-404d-a9ff-90aaedaf3430))
 
-| ![Admin](https://github.com/user-attachments/assets/208441bb-1bbe-4c75-af16-0f2feba1f54d) | ![Auth](https://github.com/user-attachments/assets/bab9ce09-3eb8-4289-9003-1e4d808b845b) |
+| ![Admin](![image](https://github.com/user-attachments/assets/49ea3a73-5775-41d7-a977-6cc60d7679a7)
+) | ![Auth](![image](https://github.com/user-attachments/assets/07ca266f-b415-4481-a2f4-fb9e6d0d4e82)
+) 
 
 ---
 
@@ -54,7 +58,7 @@ THE OPTICODE is a full-stack **Online Judge system** that allows users to solve 
 
 | Layer        | Technology                                      |
 |--------------|-------------------------------------------------|
-| Frontend     | React.js (Vite), Tailwind CSS, CodeMirror       |
+| Frontend     | React.js (Vite), Tailwind CSS, Monaco Editor    |
 | Backend      | Node.js, Express.js                             |
 | Database     | MongoDB (Mongoose)                              |
 | Code Runner  | Docker                                          |
