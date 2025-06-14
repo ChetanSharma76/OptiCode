@@ -6,11 +6,11 @@ export default function Hero() {
   const navigate = useNavigate();
   
   return (
-    <section className="w-full dark:bg-gray-950 py-35 px-4 bg-[#07034d] relative overflow-hidden">
+    <section className="w-full py-35 px-4 bg-[#07034d] relative overflow-hidden">
       {/* Grid Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05] dark:bg-grid-gray-800/[0.2]">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#07034d] dark:to-gray-950"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#07034d]"></div>
         </div>
         
         {/* Animated floating elements */}
