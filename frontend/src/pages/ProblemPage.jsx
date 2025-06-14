@@ -824,7 +824,7 @@ const ProblemPage = () => {
                     <span className="font-semibold break-words">{verdict}</span>
                   </div>
                   {/* Always show output for Compilation Error and Runtime Error */}
-                  {(['Compilation Error', 'Runtime Error'].includes(verdict) && output) && (
+                  {(['Compilation Error', 'Runtime Error'].includes(verdict) && output && !isRunMode) && (
                     <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all overflow-x-auto border border-gray-700/30 text-red-200 text-xs">
                       {output}
                     </pre>
@@ -1189,4 +1189,3 @@ const ProblemPage = () => {
 };
 
 export default ProblemPage;
-
