@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect, useRe } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AdminContext } from '../context/AdminContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Eye, Pencil, Trash2 } from "lucide-react";
@@ -25,7 +25,7 @@ const Problems = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fix filter visibility on load and handle initial loading
+  // Responsive: manage sidebar visibility
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -34,25 +34,14 @@ const Problems = () => {
         setIsSidebarOpen(false);
       }
     };
-
-    // Set initial state
     handleResize();
-    
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Handle loading state based on problems data
   useEffect(() => {
     if (problems !== undefined) {
-      // Add a small delay to show the loading state
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 800);
-      
+      const timer = setTimeout(() => setIsLoading(false), 800);
       return () => clearTimeout(timer);
     }
   }, [problems]);
@@ -81,13 +70,11 @@ const Problems = () => {
     return matchesDifficulty && matchesTags;
   });
 
-  // Function to show confirmation modal
   const onDeleteHandler = (id) => {
     setDeleteId(id);
     setShowDeleteModal(true);
   };
 
-  // Function to actually delete after confirmation
   const confirmDelete = async () => {
     if (token && deleteId) {
       try {
@@ -96,7 +83,6 @@ const Problems = () => {
           { id: deleteId }, 
           { headers: { token } }
         );
-        
         if (res.data.success) {
           getProblems();
           toast.success('Problem deleted successfully!');
@@ -109,13 +95,10 @@ const Problems = () => {
     } else {
       toast.error("You are not authorized to delete problems");
     }
-    
-    // Close modal and reset state
     setShowDeleteModal(false);
     setDeleteId(null);
   };
 
-  // Function to cancel deletion
   const cancelDelete = () => {
     setShowDeleteModal(false);
     setDeleteId(null);
@@ -127,19 +110,16 @@ const Problems = () => {
     setIsTagsDropdownOpen(false);
   };
 
-  // Loading Screen Component
+  // For mobile: handle closing tag modal on overlay click
+  const closeTagModal = () => setIsTagsDropdownOpen(false);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#07034d] to-[#1e0750] flex items-center justify-center">
         <div className="text-center">
-          {/* Golden Spinning Circle */}
           <div className="w-16 h-16 border-4 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-4"></div>
-          
-          {/* Loading Text */}
           <h2 className="text-xl font-semibold text-amber-400 mb-2">Loading Problems</h2>
           <p className="text-indigo-200 text-sm">Please wait while we fetch the latest challenges...</p>
-          
-          {/* Optional: Animated dots */}
           <div className="flex justify-center mt-4 space-x-1">
             <div className="w-2 h-2 bg-yellow-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
             <div className="w-2 h-2 bg-yellow-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -151,7 +131,7 @@ const Problems = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#07034d] to-[#1e0750] py-30 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#07034d] to-[#1e0750] py-30 px-4 sm:px-6 lg:px-8 pb-32"> {/* pb-32 ensures space for footer */}
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row">
         {/* Mobile Filter Button */}
         <div className="md:hidden mb-4">
@@ -166,7 +146,7 @@ const Problems = () => {
         {/* Filter Sidebar */}
         {isSidebarOpen && (
           <div className="w-full md:w-56 flex-shrink-0 md:mr-6 mb-6 md:mb-0">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-2 mt-15">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-2 mt-15 max-h-[80vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-bold text-amber-400 flex items-center gap-2">
                   <FiFilter /> Filters
@@ -224,7 +204,7 @@ const Problems = () => {
 
                   {isTagsDropdownOpen && (
                     <div 
-                      className="absolute z-20 mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                      className="absolute left-0 mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto z-30"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div className="p-2">
@@ -280,16 +260,53 @@ const Problems = () => {
           </div>
         )}
 
+        {/* Mobile: Tags Modal */}
+        {isTagsDropdownOpen && (
+          <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50 md:bg-transparent">
+            <div className="w-full md:w-80 bg-gray-900 md:bg-gray-800 border-t md:border border-gray-700 rounded-t-2xl md:rounded-lg shadow-2xl max-h-[70vh] overflow-y-auto p-4 md:mt-4 animate-slide-up">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-semibold text-indigo-200">Select Topics</h3>
+                <button onClick={closeTagModal} className="text-gray-300 hover:text-white">
+                  <FiX size={20} />
+                </button>
+              </div>
+              <div className="space-y-1">
+                {DSATags.map(tag => (
+                  <div 
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className="flex items-center px-2 py-1 hover:bg-gray-700/50 cursor-pointer transition-colors rounded text-xs"
+                  >
+                    <div className={`w-3 h-3 rounded-sm border mr-2 flex items-center justify-center ${
+                      selectedTags.includes(tag) 
+                        ? 'bg-indigo-500 border-indigo-500' 
+                        : 'border-gray-500'
+                    }`}>
+                      {selectedTags.includes(tag) && <FiCheck size={10} className="text-white" />}
+                    </div>
+                    <span className="text-gray-200 truncate">{tag}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={closeTagModal}
+                  className="px-4 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-semibold"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main Content */}
         <div className="flex-1">
-          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-extrabold text-amber-400 sm:text-3xl mb-2">
               All Problems
             </h1>
           </div>
-
-          {/* Problems List with increased vertical spacing */}
           <div className="space-y-3">
             {filteredProblems && filteredProblems.length > 0 ? (
               filteredProblems.map((problem, index) => (
@@ -297,7 +314,7 @@ const Problems = () => {
                   key={problem._id}
                   className={`transition-all duration-200 hover:shadow-md ${
                     index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                  } rounded-lg shadow-sm overflow-hidden border border-gray-200 md:mr-15 md:ml-25`}
+                  } rounded-lg shadow-sm overflow-hidden border border-gray-200`}
                 >
                   <div className="p-3">
                     <div className="flex items-center justify-between gap-2">
@@ -310,7 +327,6 @@ const Problems = () => {
                             {problem.title}
                           </h2>
                         </div>
-                        
                         <div className="flex flex-wrap gap-1">
                           {problem.tags.slice(0, 3).map((tag, i) => (
                             <span
@@ -322,9 +338,7 @@ const Problems = () => {
                           ))}
                         </div>
                       </div>
-
                       <div className="flex items-center space-x-3">
-                        {/* View */}
                         <button
                           onClick={() => navigate(`/view-problem/${problem._id}`)}
                           className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition shadow-md"
@@ -332,8 +346,6 @@ const Problems = () => {
                         >
                           <Eye size={18} />
                         </button>
-
-                        {/* Edit */}
                         <button
                           onClick={() => navigate(`/update-problem/${problem._id}`)}  
                           className="p-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full transition shadow-md"
@@ -341,8 +353,6 @@ const Problems = () => {
                         >
                           <Pencil size={18} />
                         </button>
-
-                        {/* Delete */}
                         <button 
                           onClick={() => onDeleteHandler(problem._id)}
                           className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-full transition shadow-md"

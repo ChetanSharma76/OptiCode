@@ -30,7 +30,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-[#0a1930] via-[#0d1b2a] to-[#1b263b]">
+    <footer className="relative bg-gradient-to-br from-[#0a1930] via-[#0d1b2a] to-[#1b263b] overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
@@ -54,7 +54,7 @@ const Footer = () => {
       <div className="relative z-10">
         {/* Bottom Bar */}
         <div className="border-t border-white/10 bg-black/20 backdrop-blur-sm">
-          <div className="container mx-auto px-6 py-8 pr-24">
+          <div className="container mx-auto px-6 py-5 pr-24">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
               
               {/* Copyright - Now on Left */}

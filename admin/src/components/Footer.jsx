@@ -54,7 +54,7 @@ const Footer = () => {
       <div className="relative z-10">
         {/* Bottom Bar */}
         <div className="border-t border-white/10 bg-black/20 backdrop-blur-sm">
-          <div className="container mx-auto px-6 py-8 pr-24">
+          <div className="container mx-auto px-6 py-5 pr-24">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
               
               {/* Copyright - Now on Left */}

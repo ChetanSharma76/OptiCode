@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { FiFilter, FiX, FiChevronDown, FiChevronUp, FiCheck, FiBookmark } from 'react-icons/fi';
+import { FiFilter, FiX, FiChevronDown, FiCheck, FiBookmark } from 'react-icons/fi';
 
 const DSATags = [
   'Array', 'String', 'Hash Table', 'Math', 'Dynamic Programming', 
@@ -17,39 +17,24 @@ const Problems = () => {
   const navigate = useNavigate();
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [isTagsDropdownOpen, setIsTagsDropdownOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [isLoading, setIsLoading] = useState(true);
   const [bookmarkingProblem, setBookmarkingProblem] = useState(null);
+  const [tagSearch, setTagSearch] = useState('');
 
-  // Fix filter visibility on load and handle initial loading
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true);
-      } else {
-        setIsSidebarOpen(false);
-      }
+      setIsSidebarOpen(window.innerWidth >= 768);
+      setIsTagsModalOpen(false);
     };
-
-    // Set initial state
-    handleResize();
-    
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Handle loading state based on problems data
   useEffect(() => {
     if (problems !== undefined) {
-      // Add a small delay to show the loading state
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 800);
-      
+      const timer = setTimeout(() => setIsLoading(false), 800);
       return () => clearTimeout(timer);
     }
   }, [problems]);
@@ -64,16 +49,16 @@ const Problems = () => {
   };
 
   const toggleTag = (tag) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
+        ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
   };
 
   const filteredProblems = problems?.filter(problem => {
     const matchesDifficulty = !selectedDifficulty || problem.difficulty === selectedDifficulty;
-    const matchesTags = selectedTags.length === 0 || 
+    const matchesTags = selectedTags.length === 0 ||
       problem.tags.some(tag => selectedTags.includes(tag));
     return matchesDifficulty && matchesTags;
   });
@@ -86,32 +71,24 @@ const Problems = () => {
     }
   };
 
-  // Enhanced bookmark functionality with proper state management
   const handleBookmark = async (problemId) => {
     if (!token) {
       toast.error('Please login to bookmark problems');
       return;
     }
-
     setBookmarkingProblem(problemId);
-    
     try {
       const isBookmarked = userData?.bookmarks?.includes(problemId);
-      console.log(isBookmarked);
-      
       const response = await axios.post(
         `${backendUrl}/api/user/bookmark`,
         { problemId },
         { headers: { token } }
       );
-
       if (response.data.success) {
-        // Update user state immediately for instant UI feedback
         setUserData(prevUser => {
-          const updatedBookmarks = isBookmarked 
+          const updatedBookmarks = isBookmarked
             ? prevUser.bookmarks.filter(id => id !== problemId)
             : [...(prevUser.bookmarks || []), problemId];
-          
           return {
             ...prevUser,
             bookmarks: updatedBookmarks
@@ -122,7 +99,6 @@ const Problems = () => {
         toast.error(response.data.message || 'Failed to update bookmark');
       }
     } catch (error) {
-      console.error('Bookmark error:', error);
       toast.error('Failed to update bookmark');
     } finally {
       setBookmarkingProblem(null);
@@ -132,22 +108,20 @@ const Problems = () => {
   const resetFilters = () => {
     setSelectedDifficulty(null);
     setSelectedTags([]);
-    setIsTagsDropdownOpen(false);
+    setTagSearch('');
   };
 
-  // Loading Screen Component - Same as other pages
+  const filteredTags = DSATags.filter(tag =>
+    tag.toLowerCase().includes(tagSearch.toLowerCase())
+  );
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#07034d] to-[#1e0750] flex items-center justify-center">
         <div className="text-center">
-          {/* Golden Spinning Circle */}
           <div className="w-16 h-16 border-4 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-4"></div>
-          
-          {/* Loading Text */}
           <h2 className="text-xl font-semibold text-amber-400 mb-2">Loading Challenges</h2>
           <p className="text-indigo-200 text-sm">Please wait while we fetch the latest coding problems...</p>
-          
-          {/* Optional: Animated dots */}
           <div className="flex justify-center mt-4 space-x-1">
             <div className="w-2 h-2 bg-yellow-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
             <div className="w-2 h-2 bg-yellow-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -159,8 +133,8 @@ const Problems = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#07034d] to-[#1e0750] py-30 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row">
+    <div className="min-h-screen bg-gradient-to-br from-[#07034d] to-[#1e0750] py-30 px-4 sm:px-6 lg:px-8 pb-32">
+      <div className="max-w-5xl flex flex-col md:flex-row justify-start mx-auto">
         {/* Mobile Filter Button */}
         <div className="md:hidden mb-4">
           <button
@@ -171,9 +145,9 @@ const Problems = () => {
           </button>
         </div>
 
-        {/* Filter Sidebar */}
+        {/* Filter Sidebar - shifted towards center with mx-auto and mr-8 */}
         {isSidebarOpen && (
-          <div className="w-full md:w-56 flex-shrink-0 md:mr-6 mb-6 md:mb-0">
+          <div className="w-full md:w-56 flex-shrink-0 mx-auto md:mr-8 mb-6 md:mb-0" style={{ minWidth: 220 }}>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-2 md:mt-25">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-bold text-amber-400 flex items-center gap-2">
@@ -214,56 +188,17 @@ const Problems = () => {
               {/* Tags Filter */}
               <div>
                 <h3 className="text-xs font-semibold text-indigo-200 mb-2">TOPICS</h3>
-                <div className="relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsTagsDropdownOpen(!isTagsDropdownOpen);
-                    }}
-                    className="w-full flex items-center justify-between bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 border border-gray-600 rounded-lg px-3 py-1.5 text-xs transition-colors"
-                  >
-                    <span className="truncate">
-                      {selectedTags.length > 0 
-                        ? `${selectedTags.length} selected` 
-                        : "All Topics"}
-                    </span>
-                    {isTagsDropdownOpen ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />}
-                  </button>
-
-                  {isTagsDropdownOpen && (
-                    <div 
-                      className="absolute z-20 mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="p-2">
-                        <input 
-                          type="text" 
-                          placeholder="Search topics..."
-                          className="w-full bg-gray-700/50 border border-gray-600 rounded px-2 py-1 text-xs text-white mb-1"
-                        />
-                      </div>
-                      <div className="space-y-1 p-1">
-                        {DSATags.map(tag => (
-                          <div 
-                            key={tag}
-                            onClick={() => toggleTag(tag)}
-                            className="flex items-center px-2 py-1 hover:bg-gray-700/50 cursor-pointer transition-colors rounded text-xs"
-                          >
-                            <div className={`w-3 h-3 rounded-sm border mr-2 flex items-center justify-center ${
-                              selectedTags.includes(tag) 
-                                ? 'bg-indigo-500 border-indigo-500' 
-                                : 'border-gray-500'
-                            }`}>
-                              {selectedTags.includes(tag) && <FiCheck size={10} className="text-white" />}
-                            </div>
-                            <span className="text-gray-200 truncate">{tag}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
+                <button
+                  onClick={() => setIsTagsModalOpen(true)}
+                  className="w-full flex items-center justify-between bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 border border-gray-600 rounded-lg px-3 py-1.5 text-xs transition-colors"
+                >
+                  <span className="truncate">
+                    {selectedTags.length > 0 
+                      ? `${selectedTags.length} selected` 
+                      : "All Topics"}
+                  </span>
+                  <FiChevronDown size={14} />
+                </button>
                 {/* Selected Tags */}
                 {selectedTags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
@@ -288,9 +223,62 @@ const Problems = () => {
           </div>
         )}
 
+        {/* Modal for DSA Tags Selection (centered, always) */}
+        {isTagsModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
+            <div 
+              className="relative bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md mx-2 mt-24 pt-8 pb-4 px-5 flex flex-col"
+              style={{ maxHeight: '65vh' }}
+            >
+              <button
+                onClick={() => setIsTagsModalOpen(false)}
+                className="absolute top-2 right-2 text-gray-400 hover:text-white"
+              >
+                <FiX size={22} />
+              </button>
+              <h2 className="text-lg font-bold text-indigo-200 mb-3 text-center">Select DSA Tags</h2>
+              <input
+                type="text"
+                placeholder="Search topics..."
+                value={tagSearch}
+                onChange={e => setTagSearch(e.target.value)}
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white mb-3"
+              />
+              <div className="flex-1 overflow-y-auto mb-4">
+                {filteredTags.length === 0 && (
+                  <p className="text-gray-400 text-sm text-center mt-6">No tags found</p>
+                )}
+                {filteredTags.map(tag => (
+                  <div
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className="flex items-center px-2 py-2 hover:bg-gray-700/50 cursor-pointer transition-colors rounded text-sm"
+                  >
+                    <div className={`w-4 h-4 rounded-sm border mr-3 flex items-center justify-center ${
+                      selectedTags.includes(tag)
+                        ? 'bg-indigo-500 border-indigo-500'
+                        : 'border-gray-500'
+                    }`}>
+                      {selectedTags.includes(tag) && <FiCheck size={12} className="text-white" />}
+                    </div>
+                    <span className="text-gray-200 truncate">{tag}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="sticky bottom-0 left-0 right-0 bg-gray-900 pt-2">
+                <button
+                  onClick={() => setIsTagsModalOpen(false)}
+                  className="w-full py-2 rounded-lg bg-indigo-600 text-white font-bold text-base"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main Content */}
-        <div className="flex-1">
-          {/* Header */}
+        <div className="flex-1 md:ml-16">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-extrabold text-amber-400 sm:text-3xl mb-2">
               Coding Challenges
@@ -299,8 +287,6 @@ const Problems = () => {
               Sharpen your skills with our curated problems
             </p>
           </div>
-
-          {/* Problems List with increased vertical spacing */}
           <div className="space-y-3">
             {filteredProblems && filteredProblems.length > 0 ? (
               filteredProblems.map((problem, index) => (
@@ -308,7 +294,7 @@ const Problems = () => {
                   key={problem._id}
                   className={`transition-all duration-200 hover:shadow-md ${
                     index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                  } rounded-lg shadow-sm overflow-hidden border border-gray-200 md:mr-15 md:ml-25`}
+                  } rounded-lg shadow-sm overflow-hidden border border-gray-200`}
                 >
                   <div className="p-3">
                     <div className="flex items-center justify-between gap-2">
@@ -321,7 +307,6 @@ const Problems = () => {
                             {problem.title}
                           </h2>
                         </div>
-                        
                         <div className="flex flex-wrap gap-1">
                           {problem.tags.slice(0, 3).map((tag, i) => (
                             <span
@@ -333,9 +318,7 @@ const Problems = () => {
                           ))}
                         </div>
                       </div>
-
                       <div className="flex items-center space-x-2">
-                        {/* Enhanced Bookmark Button - Only show if user is logged in */}
                         {token && (
                           <button
                             onClick={() => handleBookmark(problem._id)}
@@ -357,8 +340,6 @@ const Problems = () => {
                             )}
                           </button>
                         )}
-
-                        {/* Solve Button */}
                         <button
                           onClick={() => onSolveHandler(problem._id)}
                           className="flex-shrink-0 text-xs font-medium px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full shadow hover:shadow-md transition"
