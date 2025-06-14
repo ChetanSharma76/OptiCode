@@ -24,7 +24,7 @@ const Login = () => {
         setToken(data.token);
         toast.success('Login successfully');
         localStorage.setItem('token', data.token);
-        navigate('/');
+        navigate('/admin-stats');
       } else {
         toast.error(data.message);
       }

@@ -23,12 +23,12 @@ function App() {
       <main className="flex-grow relative z-10">
         <Routes>
           <Route path='/problems' element={<AdminDashboard />} />
-          <Route path='/login' element={<Login />} />
+          <Route path='/' element={<Login />} />
           <Route path='/create-problem' element={<CreateProblem />} />
           <Route path='/update-problem/:id' element={<UpdateProblem />} />
           <Route path='/view-problem/:id' element={<ViewProblem />} />
           <Route path='/my-profile' element={<Myprofile />} />
-          <Route path='/' element={<AdminStatistics />} />
+          <Route path='/admin-stats' element={<AdminStatistics />} />
         </Routes>
       </main>
 

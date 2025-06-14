@@ -149,7 +149,7 @@ const Navbar = () => {
           {isAdmin && (
             <li>
               <NavLink
-                to={`${import.meta.env.VITE_ADMIN_URL}/login`}
+                to={`${import.meta.env.VITE_ADMIN_URL}`}
                 onClick={() => setIsSidebarOpen(false)}
                 className="text-violet-400 text-lg font-medium hover:text-violet-200 transition-all"
               >
