@@ -13,15 +13,11 @@ THE OJ is a full-stack **Online Judge system** that allows users to solve coding
 
 ## 📸 Screenshots
 
-|-------------------------|--------------|
 | ![Home](https://github.com/user-attachments/assets/44fbded0-51da-44d7-a841-a3ca243f5cbb) | ![Problem](https://github.com/user-attachments/assets/e5b70dd5-0f4b-48d3-8972-06e73b5ef116) |
 
 
-|-------------------------------|----------------|
 | ![Editor](https://github.com/user-attachments/assets/82927446-9fe2-4fbc-92df-162926e240c3) | ![Submissions](https://github.com/user-attachments/assets/f96ba6ea-9802-4724-ad6b-90d4faf003a8) |
 
-
-|-------------------------------|------------------------|
 | ![Admin](https://github.com/user-attachments/assets/208441bb-1bbe-4c75-af16-0f2feba1f54d) | ![Auth](https://github.com/user-attachments/assets/bab9ce09-3eb8-4289-9003-1e4d808b845b) |
 
 ---
