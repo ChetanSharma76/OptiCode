@@ -5,10 +5,9 @@ import ss1 from "../assets/ss1.png";
 import ss3 from "../assets/ss3.png"; 
 import ss4 from '../assets/ss4.png';
 import ss5 from '../assets/ss5.png';
-import ss6 from '../assets/ss6.png';
 
 const Carousel = () => {
-  const images = [ss1, ss3, ss4, ss5, ss6];
+  const images = [ss1, ss3, ss4, ss5];
 
   return (
     <div className="w-full py-10 bg-[#07034d]">

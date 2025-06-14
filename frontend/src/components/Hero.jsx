@@ -83,7 +83,7 @@ export default function Hero() {
                 repeat: Infinity
               }}
             >
-              THE OJ
+              OPTICODE
             </motion.span>
           </motion.h1>
           

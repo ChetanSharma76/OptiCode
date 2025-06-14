@@ -12,7 +12,7 @@ const CallToAction = () => {
         Ready to level up your <span className="text-amber-300">coding?</span>
       </h2>
       <br />
-      <p className="mb-6 text-lg">Join <span className="text-purple-400">THE OJ</span> community and start solving real challenges today.</p>
+      <p className="mb-6 text-lg">Join <span className="text-purple-400">OPTICODE</span> community and start solving real challenges today.</p>
       <motion.button
         onClick={() => navigate('/problems')}
         whileHover={{ scale: 1.05 }}

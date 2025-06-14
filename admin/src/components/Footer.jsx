@@ -65,7 +65,7 @@ const Footer = () => {
                 className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3"
               >
                 <p className="text-gray-400 text-xs sm:text-sm">
-                  © 2025 <span className="text-blue-400 font-semibold">THE OJ</span>. All rights reserved.
+                  © 2025 <span className="text-blue-400 font-semibold">OPTICODE</span>. All rights reserved.
                 </p>
                 <div className="flex items-center gap-1">
                   <span className="text-gray-300 text-xs sm:text-sm">Made with</span>
@@ -90,7 +90,7 @@ const Footer = () => {
                 />
                 <div>
                   <h3 className="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    THE OJ
+                    OPTICODE
                   </h3>
                   <p className="text-gray-300 text-xs">Code. Compete. Conquer.</p>
                 </div>

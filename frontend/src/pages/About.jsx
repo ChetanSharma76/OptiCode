@@ -31,7 +31,7 @@ const About = () => {
             className="text-center space-y-4"
           >
             <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500">
-              About THE OJ
+              About OPTICODE
             </h1>
             <div className="mt-2 h-1 w-20 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto rounded-full"></div>
             <motion.p 
@@ -40,7 +40,7 @@ const About = () => {
               transition={{ delay: 0.2 }}
               className="text-gray-300 text-lg max-w-3xl mx-auto"
             >
-              Welcome to <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-violet-300">THE OJ</span> – your go-to online judge platform built by developers, for developers.
+              Welcome to <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-violet-300">OPTICODE</span> – your go-to online judge platform built by developers, for developers.
             </motion.p>
           </motion.div>
 
@@ -68,7 +68,7 @@ const About = () => {
                 We aim to make coding accessible and enjoyable by providing a streamlined interface for submitting, testing, and evaluating solutions to algorithmic problems in real time.
               </p>
               <p className="text-gray-300">
-                Whether you're preparing for interviews, contests, or just want to grow your problem-solving skills — THE OJ is here to help.
+                Whether you're preparing for interviews, contests, or just want to grow your problem-solving skills — OPTICODE is here to help.
               </p>
             </motion.div>
 

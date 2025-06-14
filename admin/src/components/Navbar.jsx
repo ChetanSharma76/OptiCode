@@ -44,7 +44,7 @@ const Navbar = () => {
             className="h-10 w-10 rounded-full cursor-pointer border border-white/30"
           />
           <span className="text-2xl font-bold text-white">
-            THE <span className="text-violet-400">OJ</span>
+            Opti<span className="text-violet-400">Code</span>
           </span>
         </div>
 
@@ -102,7 +102,7 @@ const Navbar = () => {
           {/* Header */}
           <div className="flex items-center justify-between p-6 bg-white border-b border-violet-200">
             <span className="text-2xl font-bold text-violet-900">
-              THE <span className="text-violet-600">OJ</span>
+              Opti<span className="text-violet-600">Code</span>
             </span>
             <button 
               onClick={() => setMobileMenuOpen(false)} 

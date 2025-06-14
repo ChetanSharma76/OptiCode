@@ -73,7 +73,7 @@ const Contact = () => {
             className="space-y-4 text-gray-300 text-center"
           >
             <p>
-              Our team at <strong className="text-purple-300">THE OJ</strong> is always open to improving your experience, resolving any issues,
+              Our team at <strong className="text-purple-300">OPTICODE</strong> is always open to improving your experience, resolving any issues,
               or answering any queries related to our platform.
             </p>
             <p>
@@ -81,7 +81,7 @@ const Contact = () => {
               24 hours.
             </p>
             <p>
-              You can also reach out to us directly at <span className="text-blue-300 font-semibold">admin@theoj.com</span>.
+              You can also reach out to us directly at <span className="text-blue-300 font-semibold">admin@opticode.com</span>.
             </p>
           </motion.div>
 

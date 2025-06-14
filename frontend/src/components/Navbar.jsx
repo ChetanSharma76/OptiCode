@@ -66,7 +66,7 @@ const Navbar = () => {
             className="h-10 w-10 rounded-full cursor-pointer hover:scale-105 transition duration-300"
           />
           <span className="text-2xl font-bold text-gray-300 dark:text-white">
-            THE <span className="text-violet-400">OJ</span>
+            Opti<span className="text-violet-400">Code</span>
           </span>
         </div>
 
