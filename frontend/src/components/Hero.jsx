@@ -100,13 +100,13 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-10 flex gap-6 flex-wrap"
+            className="mt-10 flex gap-3 sm:gap-6"
           >
             <motion.button
               onClick={()=>navigate('/login')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.75 }}
-              className="px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative overflow-hidden group border-transparent hover:border-white animate-borderMove"
+              className="px-4 sm:px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-sm sm:text-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative overflow-hidden group border-transparent hover:border-white animate-borderMove"
             >
               <span className="relative z-10">Get Started</span>
               <span className="absolute inset-0 bg-gradient-to-r from-purple-700 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -116,7 +116,7 @@ export default function Hero() {
               onClick={() => navigate('/problems')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 rounded-full bg-transparent border-2 border-purple-400 text-white font-semibold text-lg hover:bg-purple-500/20 transition-all duration-300 relative overflow-hidden group hover:border-white animate-borderMove"
+              className="px-4 sm:px-8 py-3 rounded-full bg-transparent border-2 border-purple-400 text-white font-semibold text-sm sm:text-lg hover:bg-purple-500/20 transition-all duration-300 relative overflow-hidden group hover:border-white animate-borderMove"
             >
               <span className="relative z-10">View Problems</span>
               <span className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-transparent hover:border-white animate-borderMove"></span>

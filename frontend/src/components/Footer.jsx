@@ -54,7 +54,7 @@ const Footer = () => {
       <div className="relative z-10">
         {/* Compact Bottom Bar */}
         <div className="border-t border-white/10 bg-black/20 backdrop-blur-sm">
-          <div className="container mx-auto px-4 py-3">
+          <div className="container mx-auto px-4 py-5">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
               
               {/* Copyright & Made with Love - Left Side */}
