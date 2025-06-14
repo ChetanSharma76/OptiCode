@@ -30,7 +30,7 @@ THE OPTICODE is a full-stack **Online Judge system** that allows users to solve 
 
 ### 👨‍🎓 User Panel
 - Browse and solve programming problems
-- Submit code in an interactive editor (CodeMirror)
+- Submit code in an interactive editor (Monaco Editor)
 - View test case-wise feedback (passed/failed)
 - Maintain a submission history
 
