@@ -6,18 +6,24 @@ import { AdminContext } from "../context/AdminContext";
 import LogoutButton from "./LogoutButton";
 import { toast } from "react-toastify";
 
-// ...imports and other code remain unchanged
-
 const Navbar = () => {
   const { token, setToken, adminData } = useContext(AdminContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Close mobile menu first
+    setMobileMenuOpen(false);
+    
+    // Then perform logout
     localStorage.removeItem("token");
     setToken(false);
     toast.success("Logout successfully");
-    window.location.href = import.meta.env.VITE_FRONTEND_URL;
+    
+    // Small delay to ensure sidebar closes before redirect
+    setTimeout(() => {
+      window.location.href = import.meta.env.VITE_FRONTEND_URL;
+    }, 100);
   };
 
   const navItems = [
@@ -149,10 +155,7 @@ const Navbar = () => {
                   <span className="text-violet-700 font-medium">My Profile</span>
                 </div>
                 <LogoutButton
-                  onLogout={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
+                  onLogout={handleLogout}
                   className="mt-4 px-5 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition"
                 />
               </>

@@ -1,26 +1,34 @@
+// LogoutButton.jsx
 import { useState } from 'react';
 import ConfirmationModal from './ConfirmationModal';
 
-const LogoutButton = ({ onLogout }) => {
-  const [showConfirmation, setShowConfirmation] = useState(false);
+const LogoutButton = ({ onLogout, className }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleConfirmLogout = () => {
+    setShowModal(false); // Close modal first
+    
+    // Small delay to ensure modal closes before logout
+    setTimeout(() => {
+      onLogout(); // This will call your handleLogout function
+    }, 100);
+  };
 
   return (
     <>
       <button
-        onClick={() => setShowConfirmation(true)}
-        className="w-full sm:w-auto px-5 py-2 font-semibold rounded-lg bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white hover:scale-105 transition-all duration-300 shadow-md text-sm sm:text-base"
+        onClick={() => setShowModal(true)}
+        className={className}
       >
         Logout
       </button>
+      
       <ConfirmationModal
-        isOpen={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
-        onConfirm={() => {
-          onLogout();
-          setShowConfirmation(false);
-        }}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleConfirmLogout}
         title="Confirm Logout"
-        message="Are you sure you want to logout? You will need to sign in again to access your account."
+        message="Are you sure you want to logout?"
         confirmText="Logout"
       />
     </>
