@@ -6,6 +6,8 @@ import { AdminContext } from "../context/AdminContext";
 import LogoutButton from "./LogoutButton";
 import { toast } from "react-toastify";
 
+// ...imports and other code remain unchanged
+
 const Navbar = () => {
   const { token, setToken, adminData } = useContext(AdminContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,20 +20,11 @@ const Navbar = () => {
     window.location.href = import.meta.env.VITE_FRONTEND_URL;
   };
 
-  // Basic nav items
   const navItems = [
     { label: "Home", path: "/" },
     { label: "Problems", path: "/problems" },
     { label: "Create Problem", path: "/create-problem" },
   ];
-
-  // Check if user is admin
-  const isAdmin = adminData?.role === "admin";
-
-  // If admin, add Admin Panel link
-  const navItemsWithAdmin = isAdmin
-    ? [...navItems, { label: "Admin Panel", path: "/admin" }]
-    : navItems;
 
   return (
     <nav className="w-full fixed h-16 z-50 top-0 left-0 bg-white/10 dark:bg-black/20 backdrop-blur-md border-b border-white/20 shadow-md">
@@ -60,7 +53,7 @@ const Navbar = () => {
             </button>
           ) : (
             <>
-              {navItemsWithAdmin.map(({ label, path }) => (
+              {navItems.map(({ label, path }) => (
                 <NavLink
                   key={label}
                   to={path}
@@ -127,7 +120,7 @@ const Navbar = () => {
               </button>
             ) : (
               <>
-                {navItemsWithAdmin.map(({ label, path }) => (
+                {navItems.map(({ label, path }) => (
                   <NavLink
                     key={label}
                     to={path}

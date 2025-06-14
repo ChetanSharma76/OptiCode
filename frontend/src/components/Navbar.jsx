@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
-import { Menu, X } from "lucide-react"; // ✅ Icons added
+import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.jpg";
 import LogoutButton from "./LogoutButton";
 
@@ -11,13 +11,16 @@ const Navbar = () => {
   const { token, userData, setToken } = useContext(AppContext);
   const navigate = useNavigate();
 
+  // Only add Admin nav item if user is admin
+  const isAdmin = userData?.role === "Admin";
+
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Problems", path: "/problems" },
     { name: "Leaderboard", path: "/leaderboard" },
     { name: "Contact", path: "/contact" },
     { name: "About", path: "/about" },
-    { name: "Admin", path: `${import.meta.env.VITE_ADMIN_URL}/login` },
+    // Admin link will be conditionally rendered below
   ];
 
   const onSubmitHandler = () => {
@@ -72,6 +75,9 @@ const Navbar = () => {
           {navItems.map(({ name, path }) => (
             <NavItem key={name} name={name} path={path} />
           ))}
+          {isAdmin && (
+            <NavItem name="Admin" path={`${import.meta.env.VITE_ADMIN_URL}/login`} />
+          )}
         </ul>
 
         {/* Right Side (Desktop) */}
@@ -103,7 +109,7 @@ const Navbar = () => {
             onClick={() => setIsSidebarOpen(true)}
             className="text-violet-300 dark:text-white hover:text-violet-400 transition"
           >
-            <Menu size={24} /> {/* ✅ This makes the hamburger visible */}
+            <Menu size={24} />
           </button>
         </div>
       </nav>
@@ -120,38 +126,38 @@ const Navbar = () => {
             onClick={() => setIsSidebarOpen(false)}
             className="text-white hover:text-red-400 transition"
           >
-            <X size={24} /> {/* ✅ Close icon */}
+            <X size={24} />
           </button>
         </div>
 
         <ul className="flex flex-col space-y-4 px-6 py-4">
-        {navItems.map(({ name, path }) => (
-          <li key={name}>
-            <NavLink
-              to={path}
-              onClick={() => setIsSidebarOpen(false)}
-              className={({ isActive }) =>
-                `relative group text-lg font-medium transition-all text-white ${
-                  isActive ? "text-violet-300" : "hover:text-violet-200"
-                }`
-              }
-            >
-              {name}
-            </NavLink>
-          </li>
-        ))}
-
-        {userData?.role === "Admin" && (
-          <NavLink
-            to="/admin"
-            onClick={() => setIsSidebarOpen(false)}
-            className="text-violet-400 text-lg font-medium hover:text-violet-200 transition-all"
-          >
-            Admin
-          </NavLink>
-        )}
-      </ul>
-
+          {navItems.map(({ name, path }) => (
+            <li key={name}>
+              <NavLink
+                to={path}
+                onClick={() => setIsSidebarOpen(false)}
+                className={({ isActive }) =>
+                  `relative group text-lg font-medium transition-all text-white ${
+                    isActive ? "text-violet-300" : "hover:text-violet-200"
+                  }`
+                }
+              >
+                {name}
+              </NavLink>
+            </li>
+          ))}
+          {isAdmin && (
+            <li>
+              <NavLink
+                to={`${import.meta.env.VITE_ADMIN_URL}/login`}
+                onClick={() => setIsSidebarOpen(false)}
+                className="text-violet-400 text-lg font-medium hover:text-violet-200 transition-all"
+              >
+                Admin
+              </NavLink>
+            </li>
+          )}
+        </ul>
 
         <div className="px-6 pt-2 space-y-4">
           {!token && !userData ? (
