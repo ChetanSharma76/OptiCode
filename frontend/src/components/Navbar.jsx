@@ -11,8 +11,8 @@ const Navbar = () => {
   const { token, userData, setToken } = useContext(AppContext);
   const navigate = useNavigate();
 
-  // Only add Admin nav item if user is admin
-  const isAdmin = userData?.role === "Admin";
+  // Only add Admin nav item if user is admin (lowercase)
+  const isAdmin = userData?.role === "admin";
 
   const navItems = [
     { name: "Home", path: "/" },
