@@ -66,7 +66,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-amber-300 dark:text-white"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-amber-300"
           >
             Master Competitive Coding on{" "}
             <motion.span 
@@ -91,7 +91,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-6 text-lg md:text-xl text-white dark:text-gray-300 max-w-2xl"
+            className="mt-6 text-lg md:text-xl text-white max-w-2xl"
           >
             A modern online judge platform for problem-solving, contests, and learning — fast and reliable.
           </motion.p>
@@ -106,7 +106,7 @@ export default function Hero() {
               onClick={()=>navigate('/login')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.75 }}
-              className="px-8 py-3  rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative overflow-hidden group  border-transparent hover:border-white animate-borderMove"
+              className="px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative overflow-hidden group border-transparent hover:border-white animate-borderMove"
             >
               <span className="relative z-10">Get Started</span>
               <span className="absolute inset-0 bg-gradient-to-r from-purple-700 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -116,10 +116,10 @@ export default function Hero() {
               onClick={() => navigate('/problems')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 rounded-full bg-transparent border-2 border-purple-400 text-white font-semibold text-lg hover:bg-purple-500/20 transition-all duration-300 relative overflow-hidden group  hover:border-white animate-borderMove"
+              className="px-8 py-3 rounded-full bg-transparent border-2 border-purple-400 text-white font-semibold text-lg hover:bg-purple-500/20 transition-all duration-300 relative overflow-hidden group hover:border-white animate-borderMove"
             >
               <span className="relative z-10">View Problems</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300  border-transparent hover:border-white animate-borderMove"></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-transparent hover:border-white animate-borderMove"></span>
             </motion.button>
           </motion.div>
         </motion.div>

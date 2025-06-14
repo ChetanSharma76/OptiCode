@@ -30,9 +30,9 @@ const cardVariants = {
 
 export default function AnimatedCards() {
   return (
-    <section className="py-20 px-4 dark:bg-gray-900 bg-[#07034d]">
-      <h2 className="text-3xl font-bold text-center mb-12 dark:text-white text-white">
-        Why Choose <span className="text-purple-400">THE OJ ?</span >
+    <section className="py-20 px-4 bg-[#07034d]">
+      <h2 className="text-3xl font-bold text-center mb-12 text-white">
+        Why Choose <span className="text-purple-400">THE OJ ?</span>
       </h2>
 
       <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -47,12 +47,12 @@ export default function AnimatedCards() {
           >
             <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10}>
               <div
-                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl text-center transform transition-transform duration-300 
+                className="bg-white p-6 rounded-xl shadow-xl text-center transform transition-transform duration-300 
                 border-2 border-transparent hover:border-purple-500 hover:shadow-[0_0_15px_#a855f7]"
               >
                 <div className="text-4xl mb-4">{card.icon}</div>
-                <h3 className="text-xl font-semibold dark:text-white">{card.title}</h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-300">{card.description}</p>
+                <h3 className="text-xl font-semibold text-black">{card.title}</h3>
+                <p className="mt-2 text-gray-600">{card.description}</p>
               </div>
             </Tilt>
           </motion.div>

@@ -17,7 +17,6 @@ const AppContextProvider = (props) => {
         try {
             
             const {data}  = await axios.get(`${backendUrl}/api/user/my-profile`, {headers:{token}})
-            console.log(data.user)
             if(data.success){
                 setUserData(data.user)
             }
@@ -36,7 +35,6 @@ const AppContextProvider = (props) => {
         try {
             
             const {data} = await axios.get(`${backendUrl}/api/problem/all`)
-            console.log(data.problems)
             if(data.success){
                 setProblems(data.problems)
             }
