@@ -76,7 +76,7 @@ const Navbar = () => {
             <NavItem key={name} name={name} path={path} />
           ))}
           {isAdmin && (
-            <NavItem name="Admin" path={`${import.meta.env.VITE_ADMIN_URL}/login`} />
+            <NavItem name="Admin" path={`${import.meta.env.VITE_ADMIN_URL}`} />
           )}
         </ul>
 
