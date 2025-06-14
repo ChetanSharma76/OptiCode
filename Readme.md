@@ -15,16 +15,14 @@ THE OPTICODE is a full-stack **Online Judge system** that allows users to solve 
 
 ## 📸 Screenshots
 
-| ![Home]](![image](https://github.com/user-attachments/assets/c28d619d-3ce8-4a4a-9eba-c8b87340fa0e)
-) | ![Problem](![ss3](https://github.com/user-attachments/assets/88c09d43-90dd-478a-a4bf-a4215ed8cac9)
-) 
+| Home | Problem | Editor |
+|------|---------|--------|
+| ![Home](https://github.com/user-attachments/assets/c28d619d-3ce8-4a4a-9eba-c8b87340fa0e) | ![Problem](https://github.com/user-attachments/assets/88c09d43-90dd-478a-a4bf-a4215ed8cac9) | ![Editor](https://github.com/user-attachments/assets/654ef453-adb2-404d-a9ff-90aaedaf3430) |
 
+| Admin | Auth |
+|-------|------|
+| ![Admin](https://github.com/user-attachments/assets/49ea3a73-5775-41d7-a977-6cc60d7679a7) | ![Auth](https://github.com/user-attachments/assets/07ca266f-b415-4481-a2f4-fb9e6d0d4e82) |
 
-| ![Editor](![ss1](https://github.com/user-attachments/assets/654ef453-adb2-404d-a9ff-90aaedaf3430))
-
-| ![Admin](![image](https://github.com/user-attachments/assets/49ea3a73-5775-41d7-a977-6cc60d7679a7)
-) | ![Auth](![image](https://github.com/user-attachments/assets/07ca266f-b415-4481-a2f4-fb9e6d0d4e82)
-) 
 
 ---
 
