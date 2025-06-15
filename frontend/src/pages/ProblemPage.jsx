@@ -45,6 +45,7 @@ const ProblemPage = () => {
   const [showAIReview, setShowAIReview] = useState(true);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState('vs-dark');
+  const [isAiReviewOpen,setIsAiReviewOpen] = useState(true);
   
   // FIX: Add window size tracking for responsive behavior
   const [windowSize, setWindowSize] = useState({
@@ -165,7 +166,7 @@ const ProblemPage = () => {
   if (savedCode && savedTimestamp) {
     const now = Date.now();
     const savedTime = Number(savedTimestamp);
-    const fifteenMinutes = 120 * 60 * 1000;
+    const fifteenMinutes = 4 * 120 * 60 * 1000;
 
     if (now - savedTime <= fifteenMinutes) {
       setCode(savedCode);
@@ -793,40 +794,40 @@ const ProblemPage = () => {
               <>
                 {/* Enhanced Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 p-3 bg-slate-900/50 border border-slate-700/50 rounded-lg backdrop-blur-sm">
-  <div className="flex items-center gap-3">
-    <div className="flex items-center gap-2">
-      <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-      <h3 className="text-sm font-semibold text-slate-200 tracking-wide">
-        Execution Results
-      </h3>
-    </div>
-    <div className="hidden sm:block w-px h-4 bg-slate-600"></div>
-  </div>
-  
-    <div className="flex items-center gap-6 mt-2 sm:mt-0">
-      {executionTime !== null && (
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-md">
-          <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span className="text-xs font-medium text-blue-300">
-            Runtime: <span className="text-blue-100 font-semibold">{Math.ceil(executionTime)}ms</span>
-          </span>
-        </div>
-      )}
-      
-      {memoryUsage !== null && (
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-md">
-          <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-          </svg>
-          <span className="text-xs font-medium text-purple-300">
-            Memory: <span className="text-purple-100 font-semibold">{memoryUsage}MB</span>
-          </span>
-        </div>
-      )}
-    </div>
-  </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <h3 className="text-sm font-semibold text-slate-200 tracking-wide">
+                      Execution Results
+                    </h3>
+                  </div>
+                  <div className="hidden sm:block w-px h-4 bg-slate-600"></div>
+                </div>
+                
+                  <div className="flex items-center gap-6 mt-2 sm:mt-0">
+                    {executionTime !== null && (
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-md">
+                        <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-xs font-medium text-blue-300">
+                          Runtime: <span className="text-blue-100 font-semibold">{Math.ceil(executionTime)}ms</span>
+                        </span>
+                      </div>
+                    )}
+                    
+                    {memoryUsage !== null && (
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-md">
+                        <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                        </svg>
+                        <span className="text-xs font-medium text-purple-300">
+                          Memory: <span className="text-purple-100 font-semibold">{memoryUsage}MB</span>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
 
                 {/* Enhanced Verdict box */}
@@ -904,21 +905,47 @@ const ProblemPage = () => {
             {/* Enhanced AI Review Section */}
             {showAIReview && aiReviewResponse && aiReviewResponse.trim().length > 0 && (
               <>
-                <div className="flex items-center justify-between text-sm font-medium mb-6 mt-8 text-slate-200 border-b border-slate-600/30 pb-3">
+                {/* Header: Now clickable with an icon */}
+                <div
+                  className="flex items-center justify-between text-sm font-medium mb-3 mt-8 text-slate-200 border-b border-slate-600/30 pb-3 cursor-pointer select-none"
+                  onClick={() => setIsAiReviewOpen(!isAiReviewOpen)}
+                >
                   <h3 className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
                     AI Review
                   </h3>
-                  {aiReviewCount !== undefined && (
-                    <span className="inline-block bg-purple-600/80 text-purple-100 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-purple-500/30">
-                      {aiReviewCount}/2 Used
-                    </span>
-                  )}
+                  <div className="flex items-center gap-4">
+                    {aiReviewCount !== undefined && (
+                      <span className="inline-block bg-purple-600/80 text-purple-100 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-purple-500/30">
+                        {aiReviewCount}/2 Used
+                      </span>
+                    )}
+                    {/* Chevron Icon for dropdown */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2.5}
+                      stroke="currentColor"
+                      className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+                        isAiReviewOpen ? "rotate-180" : ""
+                      }`}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="mt-5 bg-gradient-to-br from-slate-900/80 to-slate-800/80 text-slate-100 rounded-xl p-6 overflow-y-auto resize-y max-h-[60vh] min-h-[250px] text-sm space-y-6 leading-relaxed shadow-2xl border border-slate-700/50 backdrop-blur-sm">
-                  <ReactMarkdown
-                    children={aiReviewResponse}
-                    remarkPlugins={[remarkGfm]}
+                <div
+                  className={`grid overflow-hidden transition-all duration-500 ease-in-out ${
+                    isAiReviewOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    {/* Your original content div is preserved inside the wrapper */}
+                    <div className="mt-5 bg-gradient-to-br from-slate-900/80 to-slate-800/80 text-slate-100 rounded-xl p-6 overflow-y-auto resize-y max-h-[60vh] min-h-[250px] text-sm space-y-6 leading-relaxed shadow-2xl border border-slate-700/50 backdrop-blur-sm">
+                      <ReactMarkdown
+                        children={aiReviewResponse}
+                        remarkPlugins={[remarkGfm]}
                     components={{
                       code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || '');
@@ -1159,6 +1186,8 @@ const ProblemPage = () => {
                       },
                     }}
                   />
+                </div>
+                </div>
                 </div>
               </>
             )}
