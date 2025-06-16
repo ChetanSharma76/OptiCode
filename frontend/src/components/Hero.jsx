@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
 import heroIcon from "../assets/heroIcon.png"; // Replace with your own image
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 export default function Hero() {
   const navigate = useNavigate();
+  const {token} = useContext(AppContext);
+
+  const onGetStartedHandler = () => {
+    if(token)navigate('/');
+    else navigate('/login');
+  }
   
   return (
     <section className="w-full py-35 px-4 bg-[#07034d] relative overflow-hidden">
@@ -70,6 +78,22 @@ export default function Hero() {
           >
             Master Competitive Coding on{" "}
             <motion.span 
+              className="text-white"
+              animate={{
+                textShadow: [
+                  "0 0 8px rgba(255, 255, 255, 0.5)",
+                  "0 0 12px rgba(255, 255, 255, 0.8)",
+                  "0 0 8px rgba(255, 255, 255, 0.5)"
+                ]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity
+              }}
+            >
+              Opti
+            </motion.span>
+            <motion.span 
               className="text-purple-400"
               animate={{
                 textShadow: [
@@ -83,7 +107,7 @@ export default function Hero() {
                 repeat: Infinity
               }}
             >
-              OPTICODE
+              Code
             </motion.span>
           </motion.h1>
           
@@ -103,7 +127,7 @@ export default function Hero() {
             className="mt-10 flex gap-3 sm:gap-6"
           >
             <motion.button
-              onClick={()=>navigate('/login')}
+              onClick={onGetStartedHandler}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.75 }}
               className="px-4 sm:px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-sm sm:text-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative overflow-hidden group border-transparent hover:border-white animate-borderMove"

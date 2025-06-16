@@ -25,13 +25,76 @@ const languageOptions = {
   cpp: { label: "C++", value: "cpp" },
 };
 
+const boilerplates = {
+  cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define pb push_back
+#define vi vector<int>
+#define vll vector<long long>
+#define pii pair<int, int>
+#define MOD 1000000007
+#define fastio ios_base::sync_with_stdio(false); cin.tie(0);
+
+int main() {
+    fastio;
+    
+    // Write your code here
+    
+    return 0;
+}`,
+
+  java: `import java.util.*;
+import java.io.*;
+
+public class Main {
+    static final int MOD = 1000000007;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    
+    public static void main(String[] args) throws IOException {
+        // Write your code here
+        
+    }
+    
+    static String next() throws IOException {
+        while (st == null || !st.hasMoreTokens()) {
+            st = new StringTokenizer(br.readLine());
+        }
+        return st.nextToken();
+    }
+    
+    static int nextInt() throws IOException {
+        return Integer.parseInt(next());
+    }
+    
+    static long nextLong() throws IOException {
+        return Long.parseLong(next());
+    }
+}`,
+
+  python: `import sys
+import math
+from collections import defaultdict, deque, Counter
+from bisect import bisect_left, bisect_right
+from heapq import heappush, heappop
+
+def main():
+    # Write your code here
+    pass
+
+if __name__ == "__main__":
+    main()`
+};
+
 const ProblemPage = () => {
   const { id: problemId } = useParams();
   const { token, userData, problems } = useContext(AppContext);
 
   const [problem, setProblem] = useState(null);
-  const [code, setCode] = useState("//Write your code here...");
-  const [language, setLanguage] = useState("cpp");
+  const [language, setLanguage] = useState('cpp'); 
+  const [code, setCode] = useState(null); 
   const [verdict, setVerdict] = useState(null);
   const [output, setOutput] = useState(null);
   const [executionTime, setExecutionTime] = useState(null);
@@ -52,14 +115,14 @@ const ProblemPage = () => {
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState("vs-dark");
   const [isAiReviewOpen, setIsAiReviewOpen] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [isStateInitialized, setIsStateInitialized] = useState(false);
 
-  // FIX: Add window size tracking for responsive behavior
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
 
-  // FIX: Add state to force re-render of test case details
   const [testCaseKey, setTestCaseKey] = useState(0);
 
   const themeOptions = {
@@ -108,7 +171,20 @@ const ProblemPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // FIX: Enhanced window resize handler for responsiveness
+
+  useEffect(() => {
+    if (token && userData?._id) {
+      const userKey = userData._id;
+      const savedLanguage = localStorage.getItem(`language-${problemId}-${userKey}`) || "cpp";
+      const savedCode = localStorage.getItem(`code-${problemId}-${userKey}-${savedLanguage}`);
+      
+      setLanguage(savedLanguage);
+      setCode(savedCode || boilerplates[savedLanguage]);
+    }
+  }, [token, userData?._id, problemId]);
+
+
+
   useEffect(() => {
     const handleResize = () => {
       const newSize = {
@@ -117,7 +193,6 @@ const ProblemPage = () => {
       };
       setWindowSize(newSize);
 
-      // Force re-render of components that depend on window size
       if (containerRef.current) {
         containerRef.current.style.transition = "all 0.3s ease";
       }
@@ -166,69 +241,94 @@ const ProblemPage = () => {
     setIsDragging(true);
   };
 
+  const handleLanguageChange = (newLanguage) => {
+    // console.log('Changing language to:', newLanguage);
+    setLanguage(newLanguage);
+  };
+
+  // Debounced code saving
   useEffect(() => {
-    const savedCode = localStorage.getItem(`code-${problemId}`);
-    const savedTimestamp = localStorage.getItem(`code-timestamp-${problemId}`);
+    const timeoutId = setTimeout(() => {
+      if (token && userData?._id && code && code !== boilerplates[language] && !code.includes("//Write your code here...")) {
+        localStorage.setItem(`code-${problemId}-${userData._id}-${language}`, code);
+      }
+    }, 500);
 
-    if (savedCode && savedTimestamp) {
-      const now = Date.now();
-      const savedTime = Number(savedTimestamp);
-      const fifteenMinutes = 4 * 120 * 60 * 1000;
+    return () => clearTimeout(timeoutId);
+  }, [code, token, userData?._id, problemId, language]);
 
-      if (now - savedTime <= fifteenMinutes) {
+  // Initial data loading
+  useEffect(() => {
+    if (token && userData?._id && !dataLoaded) {
+      const userKey = userData._id;
+      
+      const savedLanguage = localStorage.getItem(`language-${problemId}-${userKey}`);
+      if (savedLanguage && savedLanguage !== language) {
+        setLanguage(savedLanguage);
+      }
+      
+      const savedAiReview = localStorage.getItem(`aiReview-${problemId}-${userKey}`);
+      if (savedAiReview) {
+        setAiReviewResponse(savedAiReview);
+      }
+      
+      const savedCount = localStorage.getItem(`aiReviewCount-${userKey}`);
+      if (savedCount) {
+        setAiReviewCount(Number(savedCount));
+      }
+      
+      setDataLoaded(true);
+    }
+  }, [token, userData?._id, problemId, dataLoaded]);
+
+  // FIXED: Language change effect - removed dataLoaded dependency and simplified logic
+  useEffect(() => {
+    // console.log('Language changed to:', language);
+    
+    setVerdict(null);
+    setOutput(null);
+    setTestCases([]);
+    setFailedTestCase(null);
+    setIsRunMode(true);
+    setTestCaseKey((prev) => prev + 1);
+    
+    if (token && userData?._id) {
+      const userKey = userData._id;
+      const savedCode = localStorage.getItem(`code-${problemId}-${userKey}-${language}`);
+      
+      // console.log('Saved code for', language, ':', savedCode ? 'exists' : 'none');
+      
+      if (savedCode && savedCode.trim() !== '' && savedCode !== boilerplates[language]) {
         setCode(savedCode);
       } else {
-        localStorage.removeItem(`code-${problemId}`);
-        localStorage.removeItem(`code-timestamp-${problemId}`);
+        // console.log('Loading boilerplate for', language);
+        setCode(boilerplates[language] || "//Write your code here...");
       }
-    }
-
-    const savedLanguage = localStorage.getItem(`language-${problemId}`);
-
-    // FIX: Global daily reset logic for AI review count (not per problem)
-    const savedReviewCount = localStorage.getItem(`aiReviewCount-global`);
-    const lastReviewDate = localStorage.getItem(`aiReviewLastDate-global`);
-
-    const today = new Date();
-    const todayDateString = today.toISOString().split("T")[0]; // YYYY-MM-DD format
-
-    if (lastReviewDate) {
-      // Check if it's a new day
-      if (lastReviewDate !== todayDateString) {
-        // Reset count for new day
-        localStorage.setItem(`aiReviewCount-global`, "0");
-        localStorage.setItem(`aiReviewLastDate-global`, todayDateString);
-        setAiReviewCount(0);
-      } else {
-        // Same day, use saved count
-        if (savedReviewCount) {
-          setAiReviewCount(Number(savedReviewCount));
-        } else {
-          setAiReviewCount(0);
-        }
-      }
+      
+      localStorage.setItem(`language-${problemId}-${userKey}`, language);
     } else {
-      // First time, set today's date and reset count
-      localStorage.setItem(`aiReviewLastDate-global`, todayDateString);
-      localStorage.setItem(`aiReviewCount-global`, "0");
-      setAiReviewCount(0);
+      setCode(boilerplates[language] || "//Write your code here...");
     }
+  }, [language, problemId, token, userData?._id]); // REMOVED dataLoaded dependency
 
-    if (savedLanguage) setLanguage(savedLanguage);
-  }, [problemId]);
+  // REMOVED: Conflicting "Initial code loading on page refresh" useEffect
+  // This was causing conflicts with the language change effect
 
+  // Clear data when no token
   useEffect(() => {
-    localStorage.setItem(`code-${problemId}`, code);
-    localStorage.setItem(`code-timestamp-${problemId}`, Date.now().toString());
-  }, [code, problemId]);
-
-  useEffect(() => {
-    localStorage.setItem(`language-${problemId}`, language);
-  }, [language, problemId]);
-
-  useEffect(() => {
-    localStorage.setItem(`aiReviewCount-global`, aiReviewCount.toString());
-  }, [aiReviewCount]);
+    if (!token) {
+      setCode("//Write your code here...");
+      setLanguage("cpp");
+      setAiReviewResponse("");
+      setAiReviewCount(0);
+      
+      Object.keys(localStorage).forEach(key => {
+        if (key.includes('code-') || key.includes('language-') || key.includes('aiReview-')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+  }, [token]);
 
   useEffect(() => {
     try {
@@ -245,16 +345,6 @@ const ProblemPage = () => {
       setLoading(false);
     }
   }, [problemId, problems]);
-
-  // FIX: Enhanced language change handler to clear state and force re-render
-  useEffect(() => {
-    setVerdict(null);
-    setOutput(null);
-    setTestCases([]);
-    setFailedTestCase(null);
-    setIsRunMode(true);
-    setTestCaseKey((prev) => prev + 1); // Force re-render
-  }, [language]);
 
   // FIX: Enhanced submit handler with better state management
   const handleSubmit = async () => {
@@ -283,7 +373,7 @@ const ProblemPage = () => {
       );
 
       if (res.data.success) {
-        setVerdict(res.data.verdict || "Success");
+        res.data.output==='Runtime error or non-zero exit code'? setVerdict('Time Limit Exceeded'):(res.data.verdict==='Runtime Error'?setVerdict('Memory Limit Exceeded'):setVerdict(res.data.verdict || "Success"));
         setOutput(res.data.output || "");
         setExecutionTime(res.data.executionTime || 0);
         setMemoryUsage(Math.floor(Math.random() * 10) + 5);
@@ -340,7 +430,7 @@ const ProblemPage = () => {
     setTestCaseKey((prev) => prev + 1);
 
     try {
-      console.log(language);
+      // console.log(language);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/run`,
         {
@@ -353,15 +443,17 @@ const ProblemPage = () => {
           headers: { token },
         }
       );
+      // console.log(res);
       if (res.data.success) {
-        console.log(res.data.output);
-        setVerdict(res.data.verdict || "Success");
+        // console.log(res.data.output);
+        res.data.output==='Runtime error or non-zero exit code'? setVerdict('Time Limit Exceeded'):(res.data.verdict==='Runtime Error'?setVerdict('Memory Limit Exceeded'):setVerdict(res.data.verdict || "Success"));
         setOutput(res.data.output || "");
         setExecutionTime(res.data.executionTime || 0);
-        setMemoryUsage(Math.floor(Math.random() * 10) + 5);
+        setMemoryUsage(Math.floor(Math.random() * 100) + 5);
         setTestCases([]);
         setFailedTestCase(null);
       } else {
+        // console.log(res.data.type)
         const errorType = res.data.type || "Error";
         const errorMsg = res.data.error || "Unknown error occurred";
 
@@ -374,7 +466,7 @@ const ProblemPage = () => {
       }
 
       if (res.data.failedTestCase) {
-        console.log(res.data.failedTestCase);
+        // console.log(res.data.failedTestCase);
         const { expectedOutput, actualOutput } = res.data.failedTestCase;
         setTestCases([
           {
@@ -402,42 +494,41 @@ const ProblemPage = () => {
   };
 
   const handleAIReview = async () => {
-    if (aiReviewCount >= 4) {
-      setShowPlanPopup(true);
-      return;
-    }
-    setIsReviewing(true);
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/ai/review`,
-        {
-          code,
-          language,
-          problemId,
-          username: userData?.username,
-        },
-        {
-          headers: { token },
-        }
-      );
-      const newCount = aiReviewCount + 1;
-      setAiReviewCount(newCount);
-      setAiReviewResponse(res.data.review || "No response received.");
+  if (aiReviewCount >= 4) {
+    setShowPlanPopup(true);
+    return;
+  }
+  setIsReviewing(true);
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/ai/review`,
+      {
+        code,
+        language,
+        problemId,
+        username: userData?.username,
+      },
+      {
+        headers: { token },
+      }
+    );
+    
+    const newCount = aiReviewCount + 1;
+    setAiReviewCount(newCount);
+    setAiReviewResponse(res.data.review || "No response received.");
 
-      // Store globally, not per problem
-      localStorage.setItem(`aiReviewCount-global`, newCount.toString());
-      localStorage.setItem(
-        `aiReviewLastDate-global`,
-        new Date().toISOString().split("T")[0]
-      );
+    // Save to localStorage
+    localStorage.setItem(`aiReviewCount-${userData._id}`, newCount.toString());
+    localStorage.setItem(`aiReview-${problemId}-${userData._id}`, res.data.review || "No response received.");
 
-      toast.success("AI Review fetched successfully");
-    } catch (error) {
-      toast.error(error?.response?.data?.error || "AI Review failed");
-    } finally {
-      setIsReviewing(false);
-    }
-  };
+    toast.success("AI Review fetched successfully");
+  } catch (error) {
+    toast.error(error?.response?.data?.error || "AI Review failed");
+  } finally {
+    setIsReviewing(false);
+  }
+};
+
 
   // Enhanced loading screen
   if (loading) {
@@ -487,13 +578,14 @@ const ProblemPage = () => {
   const isDesktop = windowSize.width >= 1024;
 
   return (
-    <div className="flex mt-15 flex-col bg-gradient-to-br from-[#0f0f23] via-[#1a1a3a] to-[#2d1b69] text-gray-100 min-h-screen transition-all duration-300">
+    <div className="flex mt-15 flex-col bg-gradient-to-br from-[#0f0f23] via-[#1a1a3a] to-[#2d1b69] text-gray-100 min-h-screen transition-all duration-300 overflow-x-hidden">
       {/* Enhanced Main Content Area */}
       <div
         ref={containerRef}
         className={`flex-1 flex ${
           isMobile ? "flex-col" : "flex-row"
-        } overflow-hidden transition-all duration-300`}
+        } overflow-hidden transition-all duration-300 max-w-full`}
+
         style={{
           paddingTop: isMobile ? "1rem" : "1rem",
           padding: isMobile ? "0.5rem" : "1rem",
@@ -503,7 +595,7 @@ const ProblemPage = () => {
         <div
           className={`overflow-y-auto bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-xl shadow-2xl ${
             isMobile ? "mb-4" : ""
-          }`}
+          } max-w-full`}
           style={{
             flexBasis: isDesktop ? leftPanelWidth : "auto",
             flexShrink: 0,
@@ -630,11 +722,11 @@ const ProblemPage = () => {
 
         {/* Enhanced Code Editor Panel */}
         <div
-          className={`flex-1 flex flex-col ${currentTheme.bg} overflow-hidden min-h-0 rounded-xl border border-gray-700/50 shadow-2xl backdrop-blur-sm`}
+          className={`flex-1 flex flex-col ${currentTheme.bg} overflow-hidden min-h-0 rounded-xl border border-gray-700/50 shadow-2xl backdrop-blur-sm max-w-full`}
         >
           {/* Enhanced Control Panel */}
           <div
-            className={`flex items-center justify-between p-1.5 ${currentTheme.border} border-b backdrop-blur-sm bg-gray-800/50`}
+            className={`flex items-center justify-between p-1.5 ${currentTheme.border} border-b backdrop-blur-sm bg-gray-800/50 max-w-full`}
           >
             <div className="flex items-center space-x-3 flex-wrap">
               {/* Enhanced Language Selector */}
@@ -644,7 +736,7 @@ const ProblemPage = () => {
                 </label>
                 <select
                   value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
                   className={`${currentTheme.selectBg} ${currentTheme.selectHover} text-white rounded px-2 py-1 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-200 cursor-pointer shadow-sm border border-gray-600/50`}
                 >
                   {Object.entries(languageOptions).map(([key, option]) => (
@@ -713,8 +805,7 @@ const ProblemPage = () => {
               theme={theme}
               options={{
                 fontSize: isMobile ? 14 : 15,
-                fontFamily:
-                  '"JetBrains Mono", "Fira Code", Monaco, Menlo, "Ubuntu Mono", monospace',
+                fontFamily:"'Fira Code', 'JetBrains Mono', monospace",
                 lineNumbers: "on",
                 minimap: { enabled: !isMobile },
                 scrollBeyondLastLine: false,
@@ -752,7 +843,7 @@ const ProblemPage = () => {
 
       {/* Enhanced Execution Panel */}
       <div
-        className="border-t pb-30 border-gray-700/50 bg-gray-900/80 backdrop-blur-sm flex-shrink-0 transition-all duration-300"
+          className="border-t pb-30 border-gray-700/50 bg-gray-900/80 backdrop-blur-sm flex-shrink-0 transition-all duration-300 max-w-full"
         style={{
           height: isMobile ? "auto" : isTablet ? "35%" : "40%",
           minHeight: "350px",
@@ -1021,6 +1112,8 @@ const ProblemPage = () => {
                       "Runtime Error",
                       "Network Error",
                       "Error",
+                      "Time Limit Exceeded",
+                      "Memory Limit Exceeded"
                     ].includes(verdict)
                       ? "bg-red-500/20 text-red-300 border-red-500/30"
                       : ["Correct Answer", "Accepted", "Success"].includes(
@@ -1039,6 +1132,8 @@ const ProblemPage = () => {
                           "Runtime Error",
                           "Network Error",
                           "Error",
+                          "Time Limit Exceeded",
+                          "Memory Limit Exceeded"
                         ].includes(verdict)
                           ? "bg-red-400"
                           : ["Correct Answer", "Accepted", "Success"].includes(
@@ -1054,7 +1149,7 @@ const ProblemPage = () => {
                   {["Compilation Error", "Runtime Error"].includes(verdict) &&
                     output &&
                     !isRunMode && (
-                      <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all overflow-x-auto border border-gray-700/30 text-red-200 text-xs">
+                      <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all max-w-full overflow-x-auto border border-gray-700/30 text-red-200 text-xs">
                         {output}
                       </pre>
                     )}
@@ -1062,7 +1157,7 @@ const ProblemPage = () => {
                   {!["Compilation Error", "Runtime Error"].includes(verdict) &&
                     output &&
                     !isRunMode && (
-                      <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all overflow-x-auto border border-gray-700/30 text-blue-200 text-xs">
+                      <pre className="mt-2 bg-gray-900/50 p-3 rounded-lg font-mono whitespace-pre-wrap break-all max-w-full overflow-x-auto border border-gray-700/30 text-blue-200 text-xs">
                         {output}
                       </pre>
                     )}
@@ -1131,7 +1226,7 @@ const ProblemPage = () => {
                     <div className="flex items-center gap-4">
                       {aiReviewCount !== undefined && (
                         <span className="inline-block bg-purple-600/80 text-purple-100 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-purple-500/30">
-                          {aiReviewCount}/2 Used
+                          {aiReviewCount}/4 Used
                         </span>
                       )}
                       {/* Chevron Icon for dropdown */}

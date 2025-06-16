@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/* Primary font for body text and UI */
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+/* Code editor and monospace text */
+code, pre, .monaco-editor {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace !important;
+}
+
+/* Buttons and interactive elements */
+button, .btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+/* Problem titles and important text */
+.problem-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}

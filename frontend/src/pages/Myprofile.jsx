@@ -59,7 +59,7 @@ const Myprofile = () => {
       setEditing(false);
       toast.success('Profile updated successfully!');
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       toast.error('Failed to update profile');
     } finally {
       setIsUploading(false);

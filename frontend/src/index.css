@@ -1,5 +1,119 @@
 @import "tailwindcss";
 
+
+/* Primary font for body text and UI */
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+/* Code editor and monospace text */
+code, pre{
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace !important;
+}
+
+/* Higher specificity for Monaco Editor with performance optimization */
+.monaco-editor .view-lines .view-line span,
+.monaco-editor .view-lines .view-line,
+.monaco-editor .view-lines,
+.monaco-editor {
+  font-family: 'Fira Code', monospace !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  font-display: swap; /* Prevent font loading glitches */
+  text-rendering: optimizeSpeed; /* Faster text rendering */
+}
+
+/* Target the actual text content */
+.monaco-editor .view-line span span {
+  font-family: 'Fira Code', monospace !important;
+  font-display: swap;
+}
+
+/* Smooth cursor animation with hardware acceleration */
+.monaco-editor .cursors-layer.cursor-smooth-caret-animation > .cursor {
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  transform: translateZ(0); /* Hardware acceleration */
+  backface-visibility: hidden;
+}
+
+.monaco-editor .cursor {
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  transform: translateZ(0); /* Hardware acceleration */
+  backface-visibility: hidden;
+}
+
+/* Optimize rendering performance with GPU acceleration */
+.monaco-editor {
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU layer */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.monaco-editor .view-lines {
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU layer */
+  backface-visibility: hidden;
+  contain: layout style paint; /* CSS containment for better performance */
+}
+
+/* Prevent text selection glitches during typing */
+.monaco-editor .view-line {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Smooth scrolling optimization */
+.monaco-editor .monaco-scrollable-element {
+  scroll-behavior: smooth;
+}
+
+/* Prevent font loading flicker */
+.monaco-editor * {
+  font-display: swap !important;
+  text-rendering: optimizeSpeed !important;
+}
+
+/* Reduce repaints during typing */
+.monaco-editor .view-zones {
+  contain: layout style;
+}
+
+/* Optimize cursor blinking */
+.monaco-editor .cursor-blink {
+  animation-timing-function: ease-in-out;
+}
+
+
+
+
+/* Buttons and interactive elements */
+button, .btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+/* Problem titles and important text */
+.problem-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+
 body, html {
   min-height: 100vh;
   min-width: 100vw;
