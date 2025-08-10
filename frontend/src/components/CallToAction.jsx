@@ -14,7 +14,7 @@ const CallToAction = () => {
       <br />
       <p className="mb-6 text-lg">Join <span className="text-white">Opti</span><span className="text-purple-400">Code</span> community and start solving real challenges today.</p>
       <motion.button
-        onClick={() => navigate('/problems')}
+        onClick={() => navigate('/login')}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="px-8 py-3 rounded-full bg-transparent border-2 border-purple-400 text-white font-semibold text-lg hover:bg-purple-500/20 transition-all duration-300 relative overflow-hidden group  hover:border-white animate-borderMove"
