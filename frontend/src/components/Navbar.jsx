@@ -85,7 +85,7 @@ const Navbar = () => {
           {!token && !userData ? (
             <button
               onClick={() => navigate("/login")}
-              className="px-5 py-2 font-semibold rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 shadow-md"
+              className="px-5 py-2 cursor-pointer font-semibold rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 shadow-md"
             >
               Login
             </button>
@@ -95,7 +95,7 @@ const Navbar = () => {
                 <img
                   src={userData?.profileImage}
                   alt="profile"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md hover:ring-2 hover:ring-violet-400 transition duration-300"
+                  className="w-10 h-10 cursor-pointer rounded-full object-cover border-2 border-white shadow-md hover:ring-2 hover:ring-violet-400 transition duration-300"
                 />
               </span>
               <LogoutButton onLogout={onSubmitHandler} />
