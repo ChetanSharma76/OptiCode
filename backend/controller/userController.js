@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
             username,
             email,
             password:hashedPassword,
-            profileImage:'https://res.cloudinary.com/ddxajykw2/image/upload/v1748023679/user_zvyqyd.png'
+            profileImage:'https://res.cloudinary.com/ddxajykw2/image/upload/v1756411715/user_3_wbilfy.png'
             
         });
 
